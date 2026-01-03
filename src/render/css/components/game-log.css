@@ -1,0 +1,236 @@
+/* game-log.css - 游戏日志样式 */
+
+/* 日志条目 */
+.log-entry {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid transparent;
+    word-break: break-all;
+    line-height: 1.5;
+}
+
+.log-entry:last-child {
+    margin-bottom: 0;
+}
+
+/* 日志类型 */
+.log-info {
+    border-left-color: #4a90e2;
+    background: rgba(74, 144, 226, 0.1);
+}
+
+.log-warning {
+    border-left-color: #ff9800;
+    background: rgba(255, 152, 0, 0.1);
+}
+
+.log-error {
+    border-left-color: #ff3d00;
+    background: rgba(255, 61, 0, 0.1);
+}
+
+.log-success {
+    border-left-color: #00c853;
+    background: rgba(0, 200, 83, 0.1);
+}
+
+.log-debug {
+    border-left-color: #9b59b6;
+    background: rgba(155, 89, 182, 0.1);
+    color: #b0b0b0;
+}
+
+/* 日志前缀 */
+.log-prefix {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-right: 8px;
+    opacity: 0.8;
+}
+
+.prefix-info { background: #4a90e2; color: white; }
+.prefix-warn { background: #ff9800; color: white; }
+.prefix-error { background: #ff3d00; color: white; }
+.prefix-success { background: #00c853; color: white; }
+.prefix-debug { background: #9b59b6; color: white; }
+
+/* 日志时间 */
+.log-time {
+    color: #666;
+    font-size: 0.8em;
+    margin-right: 8px;
+    font-family: 'Courier New', monospace;
+}
+
+/* 日志来源 */
+.log-source {
+    color: #999;
+    font-size: 0.8em;
+    margin-right: 8px;
+    font-style: italic;
+}
+
+/* 日志等级标记 */
+.log-level {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.7em;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-right: 8px;
+}
+
+.level-info { background: #4a90e2; color: white; }
+.level-warn { background: #ff9800; color: white; }
+.level-error { background: #ff3d00; color: white; }
+.level-fatal { background: #c62828; color: white; }
+.level-debug { background: #9b59b6; color: white; }
+
+/* 可折叠日志 */
+.log-collapsible {
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.log-collapsible:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.log-collapsible-content {
+    display: none;
+    margin-top: 8px;
+    padding-left: 20px;
+    border-left: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.log-collapsible.active .log-collapsible-content {
+    display: block;
+}
+
+/* 堆栈跟踪 */
+.stack-trace {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    color: #ccc;
+    padding-left: 20px;
+    line-height: 1.4;
+}
+
+.stack-line {
+    margin: 2px 0;
+}
+
+.stack-at {
+    color: #999;
+}
+
+.stack-class {
+    color: #4fc3f7;
+}
+
+.stack-method {
+    color: #ffcc80;
+}
+
+.stack-file {
+    color: #a5d6a7;
+}
+
+/* JSON 格式 */
+.log-json {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85em;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.json-key { color: #9cdcfe; }
+.json-string { color: #ce9178; }
+.json-number { color: #b5cea8; }
+.json-boolean { color: #569cd6; }
+.json-null { color: #569cd6; }
+
+/* 高亮关键字 */
+.log-highlight {
+    background: rgba(255, 235, 59, 0.3);
+    padding: 0 2px;
+    border-radius: 2px;
+    color: #ffd600;
+}
+
+/* 链接 */
+.log-link {
+    color: #4a90e2;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.log-link:hover {
+    color: #357ae8;
+}
+
+/* 进度条 */
+.log-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a90e2, #7b68ee);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.85em;
+    color: #b0b0b0;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* 动画效果 */
+.log-fade-in {
+    animation: logFadeIn 0.3s ease;
+}
+
+@keyframes logFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.log-highlight-anim {
+    animation: highlightPulse 1s ease;
+}
+
+@keyframes highlightPulse {
+    0% { background-color: rgba(255, 235, 59, 0.3); }
+    100% { background-color: transparent; }
+}

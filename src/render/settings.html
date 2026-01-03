@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hold Craft Launcher</title>
+    
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/components/modal.css">
+    
+    <style>
+        /* 基础变量 */
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #00c853;
+            --warning-color: #ff9800;
+            --danger-color: #ff3d00;
+            --bg-color: #1a1a2e;
+            --card-bg: #2d2d44;
+            --text-color: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        [data-theme="light"] {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="blue"] {
+            --primary-color: #1e88e5;
+            --bg-color: #0d47a1;
+            --card-bg: #1565c0;
+            --text-color: #e3f2fd;
+            --text-secondary: #bbdefb;
+            --border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #7b68ee);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-danger {
+            background: rgba(255, 61, 0, 0.2);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+        
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(74, 144, 226, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        .setting-input {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .setting-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+        
+        .setting-select {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .setting-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+        
+        .setting-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+        
+        .setting-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+        
+        .switch {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: .3s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+        
+        .switch input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        .switch input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .switch-label {
+            flex: 1;
+            color: var(--text-color);
+        }
+        
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7b68ee;
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-app">
+        <!-- 头部 -->
+        <header class="settings-header">
+            <div class="header-left">
+                <button class="back-btn" onclick="goBack()" title="返回">
+                    <span>←</span>
+                </button>
+                <div class="header-title">
+                    <h1>⚙️ 设置</h1>
+                    <div class="header-subtitle">配置 HCL 启动器</div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="version-badge" id="version-badge">v1.0.0</div>
+            </div>
+        </header>
+
+        <div class="settings-container">
+            <!-- 侧边栏导航 -->
+            <nav class="settings-sidebar">
+                <div class="nav-list">
+                    <a href="#general" class="nav-item active" onclick="switchSection('general')">
+                        <span class="nav-icon">🌐</span>
+                        <span class="nav-text">常规设置</span>
+                    </a>
+                    
+                    <a href="#game" class="nav-item" onclick="switchSection('game')">
+                        <span class="nav-icon">🎮</span>
+                        <span class="nav-text">游戏设置</span>
+                    </a>
+                    
+                    <a href="#java" class="nav-item" onclick="switchSection('java')">
+                        <span class="nav-icon">☕</span>
+                        <span class="nav-text">Java 设置</span>
+                    </a>
+                    
+                    <a href="#download" class="nav-item" onclick="switchSection('download')">
+                        <span class="nav-icon">📥</span>
+                        <span class="nav-text">下载设置</span>
+                    </a>
+                    
+                    <a href="#account" class="nav-item" onclick="switchSection('account')">
+                        <span class="nav-icon">👤</span>
+                        <span class="nav-text">账户设置</span>
+                    </a>
+                    
+                    <a href="#ui" class="nav-item" onclick="switchSection('ui')">
+                        <span class="nav-icon">🎨</span>
+                        <span class="nav-text">界面设置</span>
+                    </a>
+                    
+                    <a href="#advanced" class="nav-item" onclick="switchSection('advanced')">
+                        <span class="nav-icon">🔧</span>
+                        <span class="nav-text">高级设置</span>
+                    </a>
+                    
+                    <a href="#about" class="nav-item" onclick="switchSection('about')">
+                        <span class="nav-icon">ℹ️</span>
+                        <span class="nav-text">关于</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- 主内容区 -->
+            <main class="settings-content">
+                <!-- 常规设置 -->
+                <section id="general-section" class="settings-section active">
+                    <div class="section-header">
+                        <h2>🌐 常规设置</h2>
+                        <p>基本启动器配置</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <!-- 语言设置 -->
+                        <div class="setting-card">
+                            <h3>语言设置</h3>
+                            <div class="setting-item">
+                                <label for="language-select">界面语言</label>
+                                <select id="language-select" class="setting-select">
+                                    <option value="zh_CN">简体中文</option>
+                                    <option value="en_US">English</option>
+                                    <option value="zh_TW">繁體中文</option>
+                                    <option value="ja_JP">日本語</option>
+                                    <option value="ko_KR">한국어</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 启动设置 -->
+                        <div class="setting-card">
+                            <h3>启动设置</h3>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="auto-startup">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">开机自启动</span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="close-on-launch">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">启动游戏后最小化</span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="show-console">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">显示控制台窗口</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- 更新设置 -->
+                        <div class="setting-card">
+                            <h3>更新设置</h3>
+                            <div class="setting-item">
+                                <label for="update-mode">自动更新</label>
+                                <select id="update-mode" class="setting-select">
+                                    <option value="auto">自动下载并安装</option>
+                                    <option value="notify">仅通知</option>
+                                    <option value="disabled">禁用</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="beta-updates">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">接收测试版更新</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 游戏设置 -->
+                <section id="game-section" class="settings-section">
+                    <div class="section-header">
+                        <h2>🎮 游戏设置</h2>
+                        <p>游戏目录和启动选项</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <!-- 游戏目录 -->
+                        <div class="setting-card">
+                            <h3>游戏目录</h3>
+                            <div class="setting-item">
+                                <label>游戏文件目录</label>
+                                <div class="path-selector">
+                                    <input type="text" id="game-dir" class="setting-input" readonly>
+                                    <button class="btn-icon" onclick="selectGameDir()" title="选择目录">
+                                        📁
+                                    </button>
+                                </div>
+                                <div class="setting-description">
+                                    存放游戏版本、模组、存档等文件
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label>游戏文件统计</label>
+                                <div class="disk-usage">
+                                    <div class="disk-bar">
+                                        <div class="disk-fill" id="disk-fill"></div>
+                                    </div>
+                                    <div class="disk-info">
+                                        <span id="disk-used">0 GB</span> / 
+                                        <span id="disk-total">0 GB</span>
+                                        <span id="disk-percent">0%</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-small" onclick="calculateDiskUsage()" style="margin-top: 10px;">重新计算</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 启动参数 -->
+                        <div class="setting-card">
+                            <h3>启动参数</h3>
+                            <div class="setting-item">
+                                <label>默认内存分配</label>
+                                <div class="memory-control">
+                                    <input type="range" id="default-memory" min="1024" max="16384" step="256" value="2048" class="memory-slider">
+                                    <div class="memory-display">
+                                        <span id="memory-display">2048</span>
+                                        <span>MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label>游戏窗口大小</label>
+                                <div class="resolution-control">
+                                    <select id="window-width" class="setting-select" style="width: 100px;">
+                                        <option value="854">854</option>
+                                        <option value="1024">1024</option>
+                                        <option value="1280" selected>1280</option>
+                                        <option value="1366">1366</option>
+                                        <option value="1920">1920</option>
+                                        <option value="2560">2560</option>
+                                    </select>
+                                    <span style="margin: 0 10px;">×</span>
+                                    <select id="window-height" class="setting-select" style="width: 100px;">
+                                        <option value="480">480</option>
+                                        <option value="576">576</option>
+                                        <option value="720" selected>720</option>
+                                        <option value="768">768</option>
+                                        <option value="1080">1080</option>
+                                        <option value="1440">1440</option>
+                                    </select>
+                                    <span style="margin-left: 10px;">像素</span>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="fullscreen-mode">全屏模式</label>
+                                <select id="fullscreen-mode" class="setting-select">
+                                    <option value="window">窗口模式</option>
+                                    <option value="fullscreen">全屏</option>
+                                    <option value="borderless">无边框窗口</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Java 设置 -->
+                <section id="java-section" class="settings-section">
+                    <div class="section-header">
+                        <h2>☕ Java 设置</h2>
+                        <p>Java 运行时配置</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <!-- Java 检测 -->
+                        <div class="setting-card">
+                            <h3>Java 运行时</h3>
+                            <div class="setting-item">
+                                <label for="java-path-select">Java 路径</label>
+                                <div class="java-selector">
+                                    <select id="java-path-select" class="setting-select">
+                                        <option value="">自动检测</option>
+                                    </select>
+                                    <button class="btn-icon" onclick="detectJava()" title="重新检测" style="margin-left: 10px;">
+                                        🔄
+                                    </button>
+                                </div>
+                                <div class="java-info" id="java-info">
+                                    <!-- Java 信息会动态显示 -->
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label>手动指定 Java 路径</label>
+                                <div class="path-selector">
+                                    <input type="text" id="custom-java-path" class="setting-input" 
+                                           placeholder="C:\Program Files\Java\bin\java.exe">
+                                    <button class="btn-icon" onclick="selectJavaPath()" title="选择文件" style="margin-left: 10px;">
+                                        📁
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- JVM 参数 -->
+                        <div class="setting-card">
+                            <h3>JVM 参数</h3>
+                            <div class="setting-item">
+                                <label for="jvm-preset">预设参数模板</label>
+                                <select id="jvm-preset" class="setting-select" onchange="applyJvmPreset()">
+                                    <option value="custom">自定义</option>
+                                    <option value="optimized">优化参数</option>
+                                    <option value="performance">高性能</option>
+                                    <option value="compatibility">兼容性</option>
+                                    <option value="minimal">最小化</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="jvm-arguments">JVM 参数</label>
+                                <textarea id="jvm-arguments" class="setting-textarea" rows="6"
+                                          placeholder="-Xmx2G -Xms1G -XX:+UseG1GC"></textarea>
+                                <div class="setting-description">
+                                    每行一个参数，支持变量替换
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 下载设置 -->
+                <section id="download-section" class="settings-section">
+                    <div class="section-header">
+                        <h2>📥 下载设置</h2>
+                        <p>下载源和网络配置</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <!-- 下载源 -->
+                        <div class="setting-card">
+                            <h3>下载源设置</h3>
+                            <div class="setting-item">
+                                <label>首选下载源</label>
+                                <div class="source-selector">
+                                    <div class="source-option">
+                                        <label>
+                                            <input type="radio" name="download-source" value="official" checked>
+                                            <span class="source-name">官方源</span>
+                                            <span class="source-desc">Mojang 官方服务器</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-option">
+                                        <label>
+                                            <input type="radio" name="download-source" value="bmclapi">
+                                            <span class="source-name">BMCLAPI</span>
+                                            <span class="source-desc">国内镜像，速度更快</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-option">
+                                        <label>
+                                            <input type="radio" name="download-source" value="mcbbs">
+                                            <span class="source-name">MCBBS</span>
+                                            <span class="source-desc">国内镜像，资源丰富</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="auto-switch-mirror">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">在主源失败时自动切换</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- 下载配置 -->
+                        <div class="setting-card">
+                            <h3>下载配置</h3>
+                            <div class="setting-item">
+                                <label for="download-threads">下载线程数</label>
+                                <select id="download-threads" class="setting-select">
+                                    <option value="1">1 线程</option>
+                                    <option value="2" selected>2 线程</option>
+                                    <option value="4">4 线程</option>
+                                    <option value="8">8 线程</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="max-retries">最大重试次数</label>
+                                <input type="number" id="max-retries" min="1" max="10" value="3" class="setting-input">
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="download-timeout">下载超时时间</label>
+                                <div class="timeout-control">
+                                    <input type="number" id="download-timeout" min="10" max="300" value="30" class="setting-input" style="width: 100px;">
+                                    <span style="margin-left: 10px;">秒</span>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="speed-limit">限速设置</label>
+                                <div class="speed-limit">
+                                    <input type="number" id="speed-limit" min="0" max="100000" value="0" class="setting-input" style="width: 120px;">
+                                    <span style="margin-left: 10px;">KB/s (0 为不限速)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 缓存管理 -->
+                        <div class="setting-card">
+                            <h3>缓存管理</h3>
+                            <div class="setting-item">
+                                <label>缓存目录</label>
+                                <div class="cache-info">
+                                    <span id="cache-path">/path/to/cache</span>
+                                    <span id="cache-size">0 MB</span>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label>缓存设置</label>
+                                <div class="cache-controls">
+                                    <button class="btn btn-small" onclick="clearDownloadCache()">清空下载缓存</button>
+                                    <button class="btn btn-small" onclick="clearAvatarCache()">清空头像缓存</button>
+                                    <button class="btn btn-small" onclick="openCacheDir()">打开缓存目录</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 账户设置 -->
+                <section id="account-section" class="settings-section">
+                    <div class="section-header">
+                        <h2>👤 账户设置</h2>
+                        <p>账户管理和安全设置</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <!-- 账户管理 -->
+                        <div class="setting-card">
+                            <h3>账户管理</h3>
+                            <div class="account-list" id="account-list">
+                                <!-- 账户列表会动态生成 -->
+                            </div>
+                            
+                            <div class="setting-item" style="margin-top: 20px;">
+                                <button class="btn btn-primary" onclick="addAccount()">添加账户</button>
+                                <button class="btn btn-secondary" onclick="importAccounts()" style="margin-left: 10px;">导入账户</button>
+                                <button class="btn btn-secondary" onclick="exportAccounts()" style="margin-left: 10px;">导出账户</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 安全设置 -->
+                        <div class="setting-card">
+                            <h3>安全设置</h3>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="remember-password">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">自动登录已保存的账户</span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="session-timeout">会话超时</label>
+                                <select id="session-timeout" class="setting-select">
+                                    <option value="0">从不</option>
+                                    <option value="15">15 分钟</option>
+                                    <option value="30">30 分钟</option>
+                                    <option value="60">1 小时</option>
+                                    <option value="180">3 小时</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="encrypt-data">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">加密保存敏感数据</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- 头像设置 -->
+                        <div class="setting-card">
+                            <h3>头像设置</h3>
+                            <div class="setting-item">
+                                <label for="avatar-source">头像源</label>
+                                <select id="avatar-source" class="setting-select">
+                                    <option value="crafatar">Crafatar</option>
+                                    <option value="minotar">Minotar</option>
+                                    <option value="mc-heads">MC-Heads</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label>头像缓存</label>
+                                <div class="avatar-controls">
+                                    <button class="btn btn-small" onclick="refreshAvatars()">刷新所有头像</button>
+                                    <button class="btn btn-small" onclick="clearAvatarCache()" style="margin-left: 10px;">清空头像缓存</button>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="avatar-quality">头像质量</label>
+                                <select id="avatar-quality" class="setting-select">
+                                    <option value="16">16x16 (低)</option>
+                                    <option value="32">32x32</option>
+                                    <option value="64" selected>64x64 (推荐)</option>
+                                    <option value="128">128x128</option>
+                                    <option value="256">256x256 (高)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 界面设置 -->
+                <section id="ui-section" class="settings-section">
+                    <div class="section-header">
+                        <h2>🎨 界面设置</h2>
+                        <p>外观和交互设置</p>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <!-- 主题设置 -->
+                        <div class="setting-card">
+                            <h3>主题设置</h3>
+                            <div class="setting-item">
+                                <label>主题模式</label>
+                                <div class="theme-selector">
+                                    <div class="theme-option" onclick="setTheme('dark')">
+                                        <div class="theme-preview dark"></div>
+                                        <span class="theme-name">暗色</span>
+                                    </div>
+                                    <div class="theme-option" onclick="setTheme('light')">
+                                        <div class="theme-preview light"></div>
+                                        <span class="theme-name">亮色</span>
+                                    </div>
+                                    <div class="theme-option" onclick="setTheme('blue')">
+                                        <div class="theme-preview blue"></div>
+                                        <span class="theme-name">蓝色</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="follow-system-theme">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">自动切换暗色/亮色模式</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- 界面设置 -->
+                        <div class="setting-card">
+                            <h3>界面设置</h3>
+                            <div class="setting-item">
+                                <label>窗口透明度</label>
+                                <div class="opacity-control">
+                                    <input type="range" id="window-opacity" min="20" max="100" value="100" class="opacity-slider">
+                                    <span id="opacity-value" style="margin-left: 15px; min-width: 40px;">100%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="enable-animations" checked>
+                                    <span class="slider"></span>
+                                    <span class="switch-label">启用过渡动画</span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="font-size">字体大小</label>
+                                <select id="font-size" class="setting-select">
+                                    <option value="small">较小</option>
+                                    <option value="medium" selected>中等</option>
+                                    <option value="large">较大</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 通知设置 -->
+                        <div class="setting-card">
+                            <h3>通知设置</h3>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="download-notify" checked>
+                                    <span class="slider"></span>
+                                    <span class="switch-label">下载完成时显示通知</span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="launch-notify" checked>
+                                    <span class="slider"></span>
+                                    <span class="switch-label">游戏启动时显示通知</span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="error-notify" checked>
+                                    <span class="slider"></span>
+                                    <span class="switch-label">显示详细错误信息</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 高级设置 -->
+                <section id="advanced-section" class="settings-section">
+                    <div class="section-header">
+                        <h2>🔧 高级设置</h2>
+                        <p>专家级配置选项</p>
+                        <div class="section-warning">
+                            ⚠️ 警告：修改这些设置可能导致启动器异常
+                        </div>
+                    </div>
+                    
+                    <div class="settings-grid">
+                        <!-- 调试设置 -->
+                        <div class="setting-card">
+                            <h3>调试设置</h3>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="debug-mode">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">启用详细日志输出</span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="log-level">日志级别</label>
+                                <select id="log-level" class="setting-select">
+                                    <option value="error">错误</option>
+                                    <option value="warn">警告</option>
+                                    <option value="info" selected>信息</option>
+                                    <option value="debug">调试</option>
+                                    <option value="trace">追踪</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="log-size">日志文件大小</label>
+                                <select id="log-size" class="setting-select">
+                                    <option value="1">1 MB</option>
+                                    <option value="5">5 MB</option>
+                                    <option value="10" selected>10 MB</option>
+                                    <option value="50">50 MB</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- 网络设置 -->
+                        <div class="setting-card">
+                            <h3>网络设置</h3>
+                            <div class="setting-item">
+                                <label>代理设置</label>
+                                <div class="proxy-controls">
+                                    <select id="proxy-type" class="setting-select" style="margin-bottom: 10px;">
+                                        <option value="none">无代理</option>
+                                        <option value="http">HTTP</option>
+                                        <option value="https">HTTPS</option>
+                                        <option value="socks">SOCKS5</option>
+                                    </select>
+                                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                        <input type="text" id="proxy-host" class="setting-input" placeholder="主机" style="flex: 1;">
+                                        <input type="text" id="proxy-port" class="setting-input" placeholder="端口" style="width: 100px;">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="dns-mode">DNS 设置</label>
+                                <select id="dns-mode" class="setting-select">
+                                    <option value="system">系统默认</option>
+                                    <option value="google">Google DNS (8.8.8.8)</option>
+                                    <option value="cloudflare">Cloudflare DNS (1.1.1.1)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="connection-timeout">连接超时</label>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="number" id="connection-timeout" min="5" max="120" value="30" class="setting-input" style="width: 100px;">
+                                    <span>秒</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 实验性功能 -->
+                        <div class="setting-card">
+                            <h3>实验性功能</h3>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="hardware-acceleration" checked>
+                                    <span class="slider"></span>
+                                    <span class="switch-label">启用 GPU 硬件加速</span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="multi-process">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">启用多进程架构</span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="memory-optimization">
+                                    <span class="slider"></span>
+                                    <span class="switch-label">自动释放未使用内存</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- 危险操作 -->
+                        <div class="setting-card danger-zone">
+                            <h3>⚠️ 危险操作</h3>
+                            <div class="danger-item">
+                                <label>重置所有设置</label>
+                                <button class="btn btn-danger" onclick="resetAllSettings()" style="margin-top: 10px;">恢复默认设置</button>
+                                <div class="danger-description">
+                                    这将重置所有设置到默认值
+                                </div>
+                            </div>
+                            
+                            <div class="danger-item">
+                                <label>清空所有数据</label>
+                                <button class="btn btn-danger" onclick="clearAllData()" style="margin-top: 10px;">清空数据</button>
+                                <div class="danger-description">
+                                    删除所有账户、配置和缓存文件
+                                </div>
+                            </div>
+                            
+                            <div class="danger-item">
+                                <label>导出诊断信息</label>
+                                <button class="btn btn-secondary" onclick="exportDiagnostics()" style="margin-top: 10px;">生成报告</button>
+                                <div class="danger-description">
+                                    导出系统信息和日志用于调试
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 关于 -->
+                <section id="about-section" class="settings-section">
+                    <div class="section-header">
+                        <h2>ℹ️ 关于 HCL 启动器</h2>
+                        <p>版本信息和相关链接</p>
+                    </div>
+                    
+                    <div class="about-content">
+                        <!-- 应用信息 -->
+                        <div class="about-card">
+                            <div class="app-logo">
+                                <div class="logo-placeholder" style="width: 80px; height: 80px; background: var(--primary-color); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2em; color: white;">
+                                    HCL
+                                </div>
+                                <div class="app-info">
+                                    <h3>HCL 启动器</h3>
+                                    <div class="app-version">版本 1.0.0</div>
+                                    <div class="app-build">构建 2024.01.01</div>
+                                </div>
+                            </div>
+                            
+                            <div class="app-description">
+                                HCL (Hold Craft Launcher) 是一个现代化的 Minecraft Java 版启动器，
+                                支持多平台运行、快速下载、智能缓存和丰富的自定义功能。
+                            </div>
+                        </div>
+                        
+                        <!-- 系统信息 -->
+                        <div class="about-card">
+                            <h3>系统信息</h3>
+                            <div class="system-info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">操作系统</span>
+                                    <span class="info-value" id="sys-os">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">架构</span>
+                                    <span class="info-value" id="sys-arch">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">内存</span>
+                                    <span class="info-value" id="sys-memory">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Electron</span>
+                                    <span class="info-value" id="sys-electron">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Node.js</span>
+                                    <span class="info-value" id="sys-node">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Chrome</span>
+                                    <span class="info-value" id="sys-chrome">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 路径信息 -->
+                        <div class="about-card">
+                            <h3>路径信息</h3>
+                            <div class="path-info">
+                                <div class="info-item">
+                                    <span class="info-label">应用目录</span>
+                                    <span class="info-value" id="path-app">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">用户数据</span>
+                                    <span class="info-value" id="path-data">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">游戏目录</span>
+                                    <span class="info-value" id="path-game">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">日志目录</span>
+                                    <span class="info-value" id="path-logs">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 链接 -->
+                        <div class="about-card">
+                            <h3>相关链接</h3>
+                            <div class="links-grid">
+                                <a href="#" onclick="openDocumentation()" class="about-link">
+                                    <span class="link-icon">📖</span>
+                                    <span class="link-text">使用文档</span>
+                                </a>
+                                <a href="#" onclick="openGithub()" class="about-link">
+                                    <span class="link-icon">🐙</span>
+                                    <span class="link-text">GitHub 仓库</span>
+                                </a>
+                                <a href="#" onclick="openIssues()" class="about-link">
+                                    <span class="link-icon">🐛</span>
+                                    <span class="link-text">问题反馈</span>
+                                </a>
+                                <a href="#" onclick="openUpdate()" class="about-link">
+                                    <span class="link-icon">🔄</span>
+                                    <span class="link-text">检查更新</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- 版权信息 -->
+                        <div class="about-card">
+                            <h3>版权信息</h3>
+                            <div class="copyright">
+                                <p>© 2024 HCL 启动器项目</p>
+                                <p>本软件基于 MIT 许可证开源</p>
+                                <p>Minecraft 是 Mojang Studios 的商标</p>
+                                <p>本启动器与 Mojang Studios 无关</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- 底部操作栏 -->
+        <footer class="settings-footer">
+            <div class="footer-info">
+                <div>HCL 启动器设置面板</div>
+                <div id="config-status">配置已保存</div>
+            </div>
+            
+            <div class="footer-actions">
+                <button class="btn btn-secondary" onclick="exportConfig()">导出配置</button>
+                <button class="btn btn-secondary" onclick="importConfig()" style="margin-left: 10px;">导入配置</button>
+                <button class="btn btn-primary" onclick="saveSettings()" id="save-settings-btn" style="margin-left: 10px;">保存设置</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 脚本文件 -->
+    <script src="js/settings.js"></script>
+    <script src="js/components/modal-manager.js"></script>
+    <script src="js/utils/settings-utils.js"></script>
+    
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // 初始化设置管理器
+                window.settingsManager = new SettingsManager();
+                
+                // 全局函数
+                window.goBack = () => {
+                    window.history.back();
+                };
+                
+                window.switchSection = (section) => {
+                    if (window.settingsManager) {
+                        window.settingsManager.switchSection(section);
+                    }
+                };
+                
+                window.saveSettings = () => {
+                    if (window.settingsManager) {
+                        window.settingsManager.saveSettings();
+                    }
+                };
+                
+                window.exportConfig = () => {
+                    if (window.settingsManager) {
+                        window.settingsManager.exportConfig();
+                    }
+                };
+                
+                window.importConfig = () => {
+                    if (window.settingsManager) {
+                        window.settingsManager.importConfig();
+                    }
+                };
+                
+                window.resetConfig = () => {
+                    if (window.settingsManager) {
+                        window.settingsManager.resetConfig();
+                    }
+                };
+                
+                // 占位函数 - 在真实应用中需要实现
+                window.selectGameDir = async () => {
+                    if (typeof window.electronAPI !== 'undefined') {
+                        const path = await window.electronAPI.invoke('show-folder-dialog', {
+                            title: '选择游戏目录',
+                            defaultPath: window.settingsManager.config.gameDirectory
+                        });
+                        if (path) {
+                            document.getElementById('game-dir').value = path;
+                        }
+                    } else {
+                        alert('在浏览器中无法选择目录');
+                    }
+                };
+                
+                window.detectJava = async () => {
+                    if (window.settingsManager) {
+                        window.settingsManager.showNotification('正在检测 Java...', 'info');
+                        // 模拟检测
+                        setTimeout(() => {
+                            window.settingsManager.showNotification('Java 检测完成', 'success');
+                        }, 1500);
+                    }
+                };
+                
+                window.selectJavaPath = async () => {
+                    if (typeof window.electronAPI !== 'undefined') {
+                        const path = await window.electronAPI.invoke('show-open-dialog', {
+                            title: '选择 Java 可执行文件',
+                            filters: [{ name: 'Java Executable', extensions: ['exe', ''] }],
+                            properties: ['openFile']
+                        });
+                        if (path && path[0]) {
+                            document.getElementById('custom-java-path').value = path[0];
+                        }
+                    } else {
+                        alert('在浏览器中无法选择文件');
+                    }
+                };
+                
+                window.applyJvmPreset = () => {
+                    if (window.settingsManager) {
+                        const preset = document.getElementById('jvm-preset').value;
+                        window.settingsManager.applyJvmPreset(preset);
+                    }
+                };
+                
+                window.calculateDiskUsage = () => {
+                    if (window.settingsManager) {
+                        window.settingsManager.calculateDiskUsage();
+                    }
+                };
+                
+                window.clearDownloadCache = () => {
+                    if (window.modalManager) {
+                        window.modalManager.confirm({
+                            title: '确认',
+                            message: '确定要清空下载缓存吗？'
+                        }).then(confirmed => {
+                            if (confirmed) {
+                                window.settingsManager.showNotification('下载缓存已清空', 'success');
+                            }
+                        });
+                    }
+                };
+                
+                window.clearAvatarCache = () => {
+                    if (window.modalManager) {
+                        window.modalManager.confirm({
+                            title: '确认',
+                            message: '确定要清空头像缓存吗？'
+                        }).then(confirmed => {
+                            if (confirmed) {
+                                window.settingsManager.showNotification('头像缓存已清空', 'success');
+                            }
+                        });
+                    }
+                };
+                
+                window.openCacheDir = () => {
+                    window.settingsManager.showNotification('缓存目录功能', 'info');
+                };
+                
+                window.addAccount = () => {
+                    if (window.modalManager) {
+                        window.modalManager.show({
+                            title: '添加账户',
+                            content: `
+                                <div class="modal-form">
+                                    <div class="form-group">
+                                        <label for="account-type">账户类型</label>
+                                        <select id="account-type" class="setting-select">
+                                            <option value="microsoft">Microsoft 账户</option>
+                                            <option value="offline">离线账户</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="account-username">用户名</label>
+                                        <input type="text" id="account-username" class="setting-input" placeholder="输入用户名">
+                                    </div>
+                                    <div class="form-group" id="password-group" style="display: none;">
+                                        <label for="account-password">密码</label>
+                                        <input type="password" id="account-password" class="setting-input" placeholder="输入密码">
+                                    </div>
+                                </div>
+                            `,
+                            buttons: [
+                                { text: '取消', action: 'close', className: 'btn-secondary' },
+                                { 
+                                    text: '添加', 
+                                    action: () => {
+                                        const username = document.getElementById('account-username').value;
+                                        if (username) {
+                                            window.settingsManager.showNotification(`账户 ${username} 已添加`, 'success');
+                                            window.modalManager.close();
+                                        }
+                                    }, 
+                                    className: 'btn-primary' 
+                                }
+                            ]
+                        });
+                        
+                        // 监听账户类型变化
+                        document.getElementById('account-type').addEventListener('change', function(e) {
+                            document.getElementById('password-group').style.display = 
+                                e.target.value === 'microsoft' ? 'block' : 'none';
+                        });
+                    }
+                };
+                
+                window.importAccounts = () => {
+                    window.settingsManager.showNotification('导入账户功能', 'info');
+                };
+                
+                window.exportAccounts = () => {
+                    window.settingsManager.showNotification('导出账户功能', 'info');
+                };
+                
+                window.refreshAvatars = () => {
+                    window.settingsManager.showNotification('正在刷新头像...', 'info');
+                    setTimeout(() => {
+                        window.settingsManager.showNotification('头像刷新完成', 'success');
+                    }, 2000);
+                };
+                
+                window.setTheme = (theme) => {
+                    if (window.settingsManager) {
+                        window.settingsManager.setTheme(theme);
+                    }
+                };
+                
+                window.resetAllSettings = () => {
+                    if (window.settingsManager) {
+                        window.settingsManager.resetConfig();
+                    }
+                };
+                
+                window.clearAllData = () => {
+                    if (window.modalManager) {
+                        window.modalManager.confirm({
+                            title: '危险操作',
+                            message: '确定要清空所有数据吗？这将删除所有账户、配置和缓存文件。此操作不可撤销！'
+                        }).then(confirmed => {
+                            if (confirmed) {
+                                window.modalManager.showLoading('正在清空数据...');
+                                setTimeout(() => {
+                                    window.modalManager.hideLoading();
+                                    window.settingsManager.showNotification('所有数据已清空', 'success');
+                                }, 2000);
+                            }
+                        });
+                    }
+                };
+                
+                window.exportDiagnostics = () => {
+                    if (window.modalManager) {
+                        window.modalManager.showLoading('正在生成诊断报告...');
+                        
+                        setTimeout(() => {
+                            const report = {
+                                timestamp: new Date().toISOString(),
+                                system: {
+                                    platform: navigator.platform,
+                                    userAgent: navigator.userAgent,
+                                    language: navigator.language
+                                },
+                                config: window.settingsManager?.config,
+                                paths: window.settingsManager?.paths
+                            };
+                            
+                            const reportStr = JSON.stringify(report, null, 2);
+                            SettingsUtils.saveFile(reportStr, `hcl-diagnostics-${Date.now()}.json`, 'application/json');
+                            
+                            window.modalManager.hideLoading();
+                            window.modalManager.show({
+                                title: '成功',
+                                content: '诊断报告已生成并下载',
+                                buttons: [{ text: '确定', action: 'close' }]
+                            });
+                        }, 1500);
+                    }
+                };
+                
+                window.openDocumentation = () => {
+                    window.settingsManager.showNotification('打开文档', 'info');
+                };
+                
+                window.openGithub = () => {
+                    window.open('https://github.com', '_blank');
+                };
+                
+                window.openIssues = () => {
+                    window.settingsManager.showNotification('打开问题反馈', 'info');
+                };
+                
+                window.openUpdate = () => {
+                    window.settingsManager.showNotification('检查更新中...', 'info');
+                    setTimeout(() => {
+                        window.settingsManager.showNotification('已是最新版本', 'success');
+                    }, 1500);
+                };
+                
+                console.log('✅ 设置页面初始化完成');
+            } catch (error) {
+                console.error('❌ 设置页面初始化失败:', error);
+                if (window.modalManager) {
+                    window.modalManager.show({
+                        title: '初始化失败',
+                        content: error.message,
+                        type: 'error',
+                        buttons: [{ text: '确定', action: 'close' }]
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
