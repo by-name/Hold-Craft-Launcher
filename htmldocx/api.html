@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 参考 - Hold Craft Launcher</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* API 文档特定样式 */
+        .api-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #4a90e2;
+        }
+        
+        .api-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .api-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            width: 50px;
+            height: 50px;
+            background: #4a90e2;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .api-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid #4a90e2;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        
+        .method-get { background: #61affe; color: white; }
+        .method-post { background: #49cc90; color: white; }
+        .method-put { background: #fca130; color: white; }
+        .method-delete { background: #f93e3e; color: white; }
+        
+        .url {
+            font-family: 'Courier New', monospace;
+            background: #2b2b2b;
+            color: #f8f8f2;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .params-table th, .params-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .params-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        .param-required {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .response-example {
+            background: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        
+        .response-key { color: #9cdcfe; }
+        .response-string { color: #ce9178; }
+        .response-number { color: #b5cea8; }
+        .response-boolean { color: #569cd6; }
+        .response-null { color: #569cd6; }
+        .response-comment { color: #6a9955; }
+        
+        .http-codes {
+            margin: 20px 0;
+        }
+        
+        .http-code {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-right: 5px;
+        }
+        
+        .code-200 { background: #d4edda; color: #155724; }
+        .code-400 { background: #f8d7da; color: #721c24; }
+        .code-401 { background: #fff3cd; color: #856404; }
+        .code-404 { background: #e2e3e5; color: #383d41; }
+        .code-500 { background: #d1ecf1; color: #0c5460; }
+        
+        .sidebar-nav {
+            position: fixed;
+            right: 20px;
+            top: 100px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 250px;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+        
+        .sidebar-nav h3 {
+            margin-top: 0;
+            color: #4a90e2;
+        }
+        
+        .sidebar-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .sidebar-nav li {
+            margin: 8px 0;
+        }
+        
+        .sidebar-nav a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        
+        .sidebar-nav a:hover {
+            color: #4a90e2;
+        }
+        
+        .toc-link {
+            padding-left: 10px;
+        }
+        
+        .toc-link-2 {
+            padding-left: 20px;
+            font-size: 0.85em;
+        }
+        
+        .toc-link-3 {
+            padding-left: 30px;
+            font-size: 0.8em;
+        }
+        
+        @media (max-width: 1200px) {
+            .sidebar-nav {
+                display: none;
+            }
+        }
+        
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .ref-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #4a90e2;
+        }
+        
+        .ref-card h4 {
+            margin: 0 0 10px 0;
+            color: #4a90e2;
+        }
+        
+        .code-snippet {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        
+        .api-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .api-tip {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 API 参考</h1>
+            <p>HCL 启动器核心模块 API 文档</p>
+        </header>
+        
+        <nav>
+            <a href="index.html">← 返回首页</a>
+        </nav>
+        
+        <!-- 右侧导航 -->
+        <div class="sidebar-nav" id="sidebarNav">
+            <h3>目录</h3>
+            <ul>
+                <li><a href="#overview" class="toc-link">概述</a></li>
+                <li><a href="#avatar-api" class="toc-link">AvatarManager</a>
+                    <ul>
+                        <li><a href="#avatar-get" class="toc-link-2">getAvatar()</a></li>
+                        <li><a href="#avatar-batch" class="toc-link-2">batchGetAvatars()</a></li>
+                        <li><a href="#avatar-create" class="toc-link-2">createAvatarElement()</a></li>
+                    </ul>
+                </li>
+                <li><a href="#account-api" class="toc-link">AccountManager</a>
+                    <ul>
+                        <li><a href="#account-add" class="toc-link-2">addAccount()</a></li>
+                        <li><a href="#account-get" class="toc-link-2">getAccounts()</a></li>
+                        <li><a href="#account-set" class="toc-link-2">setCurrentAccount()</a></li>
+                    </ul>
+                </li>
+                <li><a href="#game-api" class="toc-link">GameManager</a>
+                    <ul>
+                        <li><a href="#game-launch" class="toc-link-2">launchGame()</a></li>
+                        <li><a href="#game-stop" class="toc-link-2">stopGame()</a></li>
+                    </ul>
+                </li>
+                <li><a href="#download-api" class="toc-link">DownloadManager</a>
+                    <ul>
+                        <li><a href="#download-file" class="toc-link-2">downloadFile()</a></li>
+                        <li><a href="#download-version" class="toc-link-2">downloadVersion()</a></li>
+                        <li><a href="#download-assets" class="toc-link-2">downloadAssets()</a></li>
+                    </ul>
+                </li>
+                <li><a href="#config-api" class="toc-link">ConfigManager</a>
+                    <ul>
+                        <li><a href="#config-get" class="toc-link-2">getConfig()</a></li>
+                        <li><a href="#config-save" class="toc-link-2">saveConfig()</a></li>
+                    </ul>
+                </li>
+                <li><a href="#data-api" class="toc-link">DataManager</a>
+                    <ul>
+                        <li><a href="#data-load" class="toc-link-2">loadData()</a></li>
+                        <li><a href="#data-save" class="toc-link-2">saveData()</a></li>
+                        <li><a href="#data-accounts" class="toc-link-2">账户管理</a></li>
+                        <li><a href="#data-cache" class="toc-link-2">缓存管理</a></li>
+                    </ul>
+                </li>
+                <li><a href="#java-api" class="toc-link">JavaLauncher</a>
+                    <ul>
+                        <li><a href="#java-detect" class="toc-link-2">detectJavaVersions()</a></li>
+                        <li><a href="#java-launch" class="toc-link-2">launchGame()</a></li>
+                        <li><a href="#java-stop" class="toc-link-2">stopGame()</a></li>
+                    </ul>
+                </li>
+                <li><a href="#examples" class="toc-link">使用示例</a></li>
+            </ul>
+        </div>
+        
+        <!-- 概述 -->
+        <section id="overview" class="api-section">
+            <div class="api-header">
+                <div class="api-icon">📋</div>
+                <div>
+                    <h2>API 概述</h2>
+                    <p>HCL 启动器模块化 API 参考文档</p>
+                </div>
+            </div>
+            
+            <h3>🎯 使用说明</h3>
+            <p>所有 API 都基于模块化设计，每个模块提供特定的功能接口。</p>
+            
+            <div class="quick-ref">
+                <div class="ref-card">
+                    <h4>AvatarManager</h4>
+                    <p>头像管理相关 API</p>
+                </div>
+                <div class="ref-card">
+                    <h4>AccountManager</h4>
+                    <p>账户管理相关 API</p>
+                </div>
+                <div class="ref-card">
+                    <h4>GameManager</h4>
+                    <p>游戏启动相关 API</p>
+                </div>
+                <div class="ref-card">
+                    <h4>DownloadManager</h4>
+                    <p>文件下载相关 API</p>
+                </div>
+                <div class="ref-card">
+                    <h4>ConfigManager</h4>
+                    <p>配置管理相关 API</p>
+                </div>
+                <div class="ref-card">
+                    <h4>DataManager</h4>
+                    <p>数据存储相关 API</p>
+                </div>
+                <div class="ref-card">
+                    <h4>JavaLauncher</h4>
+                    <p>Java 启动相关 API</p>
+                </div>
+            </div>
+            
+            <h3>📁 模块导入</h3>
+            <div class="response-example">
+<span class="response-comment">// 在 Electron 主进程中</span><br>
+<span class="response-key">const</span> { AvatarManager } = <span class="response-key">require</span>(<span class="response-string">'./src/core/AvatarManager'</span>);<br>
+<span class="response-key">const</span> { AccountManager } = <span class="response-key">require</span>(<span class="response-string">'./src/core/AccountManager'</span>);<br>
+<span class="response-key">const</span> { DownloadManager } = <span class="response-key">require</span>(<span class="response-string">'./src/core/DownloadManager'</span>);<br>
+<span class="response-key">const</span> { ConfigManager } = <span class="response-key">require</span>(<span class="response-string">'./src/core/ConfigManager'</span>);<br>
+<span class="response-key">const</span> { DataManager } = <span class="response-key">require</span>(<span class="response-string">'./src/core/DataManager'</span>);<br>
+<span class="response-key">const</span> { JavaLauncher } = <span class="response-key">require</span>(<span class="response-string">'./src/core/JavaLauncher'</span>);<br><br>
+
+<span class="response-comment">// 在 WebView/浏览器环境中</span><br>
+<span class="response-key">import</span> { AvatarManager } <span class="response-key">from</span> <span class="response-string">'./src/core/AvatarManager.js'</span>;<br>
+<span class="response-key">import</span> { AccountManager } <span class="response-key">from</span> <span class="response-string">'./src/core/AccountManager.js'</span>;<br>
+<span class="response-key">import</span> { DownloadManager } <span class="response-key">from</span> <span class="response-string">'./src/core/DownloadManager.js'</span>;
+            </div>
+        </section>
+        
+        <!-- AvatarManager API -->
+        <section id="avatar-api" class="api-section">
+            <div class="api-header">
+                <div class="api-icon">🎨</div>
+                <div>
+                    <h2>AvatarManager API</h2>
+                    <p>头像管理器接口</p>
+                </div>
+            </div>
+            
+            <!-- getAvatar -->
+            <div id="avatar-get" class="endpoint">
+                <h3><span class="method method-get">GET</span> <code>getAvatar()</code></h3>
+                <p>获取玩家头像</p>
+                
+                <div class="url">async getAvatar(username: string, uuid?: string, forceRefresh?: boolean): Promise&lt;string&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>默认值</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>username</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>-</td>
+                        <td>玩家用户名</td>
+                    </tr>
+                    <tr>
+                        <td>uuid</td>
+                        <td>string</td>
+                        <td>否</td>
+                        <td>null</td>
+                        <td>玩家 UUID，如果有会更准确</td>
+                    </tr>
+                    <tr>
+                        <td>forceRefresh</td>
+                        <td>boolean</td>
+                        <td>否</td>
+                        <td>false</td>
+                        <td>强制刷新缓存，忽略本地缓存</td>
+                    </tr>
+                </table>
+                
+                <h4>返回值</h4>
+                <p>返回头像的 DataURL 字符串，格式：<code>data:image/png;base64,...</code></p>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> avatarManager = <span class="response-key">new</span> <span class="response-key">AvatarManager</span>(dataManager);<br><br>
+
+<span class="response-comment">// 获取 Notch 的头像</span><br>
+<span class="response-key">const</span> avatar = <span class="response-key">await</span> avatarManager.<span class="response-key">getAvatar</span>(<span class="response-string">'Notch'</span>);<br><br>
+
+<span class="response-comment">// 通过 UUID 获取</span><br>
+<span class="response-key">const</span> uuid = <span class="response-string">'8667ba71b85a4004af54457a9734eed7'</span>; <span class="response-comment">// Steve 的 UUID</span><br>
+<span class="response-key">const</span> steveAvatar = <span class="response-key">await</span> avatarManager.<span class="response-key">getAvatar</span>(<span class="response-string">'Steve'</span>, uuid);<br><br>
+
+<span class="response-comment">// 强制刷新缓存</span><br>
+<span class="response-key">const</span> freshAvatar = <span class="response-key">await</span> avatarManager.<span class="response-key">getAvatar</span>(<span class="response-string">'Alex'</span>, <span class="response-key">null</span>, <span class="response-key">true</span>);
+                </div>
+                
+                <h4>HTTP 状态码</h4>
+                <div class="http-codes">
+                    <span class="http-code code-200">200 成功</span>
+                    <span class="http-code code-400">400 参数错误</span>
+                    <span class="http-code code-404">404 头像未找到</span>
+                </div>
+            </div>
+            
+            <!-- batchGetAvatars -->
+            <div id="avatar-batch" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>batchGetAvatars()</code></h3>
+                <p>批量获取多个玩家头像</p>
+                
+                <div class="url">async batchGetAvatars(accounts: Array, onProgress?: Function): Promise&lt;Array&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>accounts</td>
+                        <td>Array&lt;Object&gt;</td>
+                        <td>账户对象数组，每个对象包含 username 和可选的 uuid</td>
+                    </tr>
+                    <tr>
+                        <td>onProgress</td>
+                        <td>Function</td>
+                        <td>进度回调函数，接收进度对象 {current, total, percent}</td>
+                    </tr>
+                </table>
+                
+                <h4>返回值</h4>
+                <p>返回包含头像的账户数组，每个账户对象添加了 avatar 属性</p>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> accounts = [<br>
+&nbsp;&nbsp;{ username: <span class="response-string">'Notch'</span> },<br>
+&nbsp;&nbsp;{ username: <span class="response-string">'Steve'</span>, uuid: <span class="response-string">'8667ba71b85a4004af54457a9734eed7'</span> },<br>
+&nbsp;&nbsp;{ username: <span class="response-string">'Alex'</span> }<br>
+];<br><br>
+
+<span class="response-key">const</span> accountsWithAvatars = <span class="response-key">await</span> avatarManager.<span class="response-key">batchGetAvatars</span>(accounts, (progress) => {<br>
+&nbsp;&nbsp;console.<span class="response-key">log</span>(<span class="response-string">`进度: <span class="response-number">${</span>progress.percent<span class="response-number">}</span>% (<span class="response-number">${</span>progress.current<span class="response-number">}</span>/<span class="response-number">${</span>progress.total<span class="response-number">}</span>)`</span>);<br>
+});
+                </div>
+            </div>
+            
+            <!-- createAvatarElement -->
+            <div id="avatar-create" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>createAvatarElement()</code></h3>
+                <p>创建头像 DOM 元素</p>
+                
+                <div class="url">createAvatarElement(avatarData: string, options?: Object): HTMLElement</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>默认值</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>avatarData</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>头像 DataURL 或 URL</td>
+                    </tr>
+                    <tr>
+                        <td>options</td>
+                        <td>Object</td>
+                        <td>{}</td>
+                        <td>配置选项</td>
+                    </tr>
+                </table>
+                
+                <h4>Options 选项</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>属性</th>
+                        <th>类型</th>
+                        <th>默认值</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>size</td>
+                        <td>number</td>
+                        <td>64</td>
+                        <td>头像尺寸（像素）</td>
+                    </tr>
+                    <tr>
+                        <td>className</td>
+                        <td>string</td>
+                        <td>'avatar'</td>
+                        <td>CSS 类名</td>
+                    </tr>
+                    <tr>
+                        <td>alt</td>
+                        <td>string</td>
+                        <td>'玩家头像'</td>
+                        <td>alt 文本</td>
+                    </tr>
+                    <tr>
+                        <td>onclick</td>
+                        <td>Function</td>
+                        <td>null</td>
+                        <td>点击事件处理器</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> avatar = <span class="response-key">await</span> avatarManager.<span class="response-key">getAvatar</span>(<span class="response-string">'Notch'</span>);<br>
+<span class="response-key">const</span> avatarElement = avatarManager.<span class="response-key">createAvatarElement</span>(avatar, {<br>
+&nbsp;&nbsp;size: <span class="response-number">128</span>,<br>
+&nbsp;&nbsp;className: <span class="response-string">'player-avatar'</span>,<br>
+&nbsp;&nbsp;onclick: () => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="response-string">'头像被点击！'</span>);<br>
+&nbsp;&nbsp;}<br>
+});<br><br>
+
+document.body.<span class="response-key">appendChild</span>(avatarElement);
+                </div>
+            </div>
+        </section>
+        
+        <!-- AccountManager API -->
+        <section id="account-api" class="api-section">
+            <div class="api-header">
+                <div class="api-icon">👤</div>
+                <div>
+                    <h2>AccountManager API</h2>
+                    <p>账户管理器接口</p>
+                </div>
+            </div>
+            
+            <!-- addAccount -->
+            <div id="account-add" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>addAccount()</code></h3>
+                <p>添加新账户</p>
+                
+                <div class="url">async addAccount(accountData: Object): Promise&lt;string&gt;</div>
+                
+                <h4>请求参数</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>字段</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>type</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>账户类型: 'microsoft', 'thirdparty', 'offline'</td>
+                    </tr>
+                    <tr>
+                        <td>username</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>用户名</td>
+                    </tr>
+                    <tr>
+                        <td>uuid</td>
+                        <td>string</td>
+                        <td>否</td>
+                        <td>用户 UUID（Microsoft 账户必需）</td>
+                    </tr>
+                    <tr>
+                        <td>accessToken</td>
+                        <td>string</td>
+                        <td>否</td>
+                        <td>访问令牌（Microsoft 账户）</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-comment">// 添加 Microsoft 账户</span><br>
+<span class="response-key">const</span> accountId = <span class="response-key">await</span> accountManager.<span class="response-key">addAccount</span>({<br>
+&nbsp;&nbsp;type: <span class="response-string">'microsoft'</span>,<br>
+&nbsp;&nbsp;username: <span class="response-string">'Player123'</span>,<br>
+&nbsp;&nbsp;uuid: <span class="response-string">'d1b37b12a1234567890abcdef123456'</span>,<br>
+&nbsp;&nbsp;accessToken: <span class="response-string">'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'</span><br>
+});<br><br>
+
+<span class="response-comment">// 添加离线账户</span><br>
+<span class="response-key">const</span> offlineId = <span class="response-key">await</span> accountManager.<span class="response-key">addAccount</span>({<br>
+&nbsp;&nbsp;type: <span class="response-string">'offline'</span>,<br>
+&nbsp;&nbsp;username: <span class="response-string">'离线玩家'</span><br>
+});
+                </div>
+                
+                <h4>响应示例</h4>
+                <div class="response-example">
+<span class="response-comment">// 返回账户ID</span><br>
+<span class="response-string">"msa_1234567890"</span>
+                </div>
+            </div>
+            
+            <!-- getAccounts -->
+            <div id="account-get" class="endpoint">
+                <h3><span class="method method-get">GET</span> <code>getAccounts()</code></h3>
+                <p>获取所有账户列表</p>
+                
+                <div class="url">async getAccounts(): Promise&lt;Array&lt;Object&gt;&gt;</div>
+                
+                <h4>响应示例</h4>
+                <div class="response-example">
+[<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"id"</span>: <span class="response-string">"msa_123456"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"type"</span>: <span class="response-string">"microsoft"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"username"</span>: <span class="response-string">"Player123"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"uuid"</span>: <span class="response-string">"d1b37b12a1234567890abcdef123456"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"avatar"</span>: <span class="response-string">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUg..."</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"lastUsed"</span>: <span class="response-number">1700000000000</span><br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"id"</span>: <span class="response-string">"offline_abc123"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"type"</span>: <span class="response-string">"offline"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"username"</span>: <span class="response-string">"离线玩家"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"avatar"</span>: <span class="response-string">"data:image/png;base64,iVBORw0KGgoAAAANSUhEUg..."</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="response-string">"lastUsed"</span>: <span class="response-number">1699999999999</span><br>
+&nbsp;&nbsp;}<br>
+]
+                </div>
+            </div>
+            
+            <!-- setCurrentAccount -->
+            <div id="account-set" class="endpoint">
+                <h3><span class="method method-put">PUT</span> <code>setCurrentAccount()</code></h3>
+                <p>设置当前使用的账户</p>
+                
+                <div class="url">async setCurrentAccount(accountId: string): Promise&lt;boolean&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>accountId</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>要设置的账户ID</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-comment">// 设置当前账户</span><br>
+<span class="response-key">const</span> success = <span class="response-key">await</span> accountManager.<span class="response-key">setCurrentAccount</span>(<span class="response-string">'msa_123456'</span>);<br><br>
+<span class="response-key">if</span> (success) {<br>
+&nbsp;&nbsp;console.<span class="response-key">log</span>(<span class="response-string">'账户切换成功'</span>);<br>
+} <span class="response-key">else</span> {<br>
+&nbsp;&nbsp;console.<span class="response-key">log</span>(<span class="response-string">'账户不存在'</span>);<br>
+}
+                </div>
+            </div>
+        </section>
+        
+        <!-- GameManager API -->
+        <section id="game-api" class="api-section">
+            <div class="api-header">
+                <div class="api-icon">🎮</div>
+                <div>
+                    <h2>GameManager API</h2>
+                    <p>游戏管理器接口</p>
+                </div>
+            </div>
+            
+            <!-- launchGame -->
+            <div id="game-launch" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>launchGame()</code></h3>
+                <p>启动 Minecraft 游戏</p>
+                
+                <div class="url">async launchGame(config: Object): Promise&lt;Object&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>字段</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>account</td>
+                        <td>Object</td>
+                        <td class="param-required">是</td>
+                        <td>游戏账户对象</td>
+                    </tr>
+                    <tr>
+                        <td>version</td>
+                        <td>Object</td>
+                        <td class="param-required">是</td>
+                        <td>游戏版本信息</td>
+                    </tr>
+                    <tr>
+                        <td>javaPath</td>
+                        <td>string</td>
+                        <td>否</td>
+                        <td>Java 路径，不指定则自动检测</td>
+                    </tr>
+                    <tr>
+                        <td>memory</td>
+                        <td>number</td>
+                        <td>否</td>
+                        <td>内存分配（MB），默认 2048</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> accounts = <span class="response-key">await</span> accountManager.<span class="response-key">getAccounts</span>();<br>
+<span class="response-key">const</span> currentAccount = accounts[<span class="response-number">0</span>];<br>
+<span class="response-key">const</span> config = <span class="response-key">await</span> configManager.<span class="response-key">getConfig</span>();<br><br>
+
+<span class="response-key">const</span> result = <span class="response-key">await</span> gameManager.<span class="response-key">launchGame</span>({<br>
+&nbsp;&nbsp;account: currentAccount,<br>
+&nbsp;&nbsp;version: { id: <span class="response-string">'1.20.1'</span> },<br>
+&nbsp;&nbsp;javaPath: config.javaPath,<br>
+&nbsp;&nbsp;memory: config.memory<br>
+});<br><br>
+
+<span class="response-key">if</span> (result.success) {<br>
+&nbsp;&nbsp;console.<span class="response-key">log</span>(<span class="response-string">`游戏启动成功，进程ID: <span class="response-number">${</span>result.pid<span class="response-number">}</span>`</span>);<br>
+}
+                </div>
+                
+                <h4>响应示例</h4>
+                <div class="response-example">
+{<br>
+&nbsp;&nbsp;<span class="response-string">"success"</span>: <span class="response-boolean">true</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"pid"</span>: <span class="response-number">12345</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"message"</span>: <span class="response-string">"游戏启动成功"</span><br>
+}
+                </div>
+            </div>
+            
+            <!-- stopGame -->
+            <div id="game-stop" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>stopGame()</code></h3>
+                <p>停止运行中的游戏</p>
+                
+                <div class="url">async stopGame(): Promise&lt;boolean&gt;</div>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> stopped = <span class="response-key">await</span> gameManager.<span class="response-key">stopGame</span>();<br>
+<span class="response-key">if</span> (stopped) {<br>
+&nbsp;&nbsp;console.<span class="response-key">log</span>(<span class="response-string">'游戏已停止'</span>);<br>
+} <span class="response-key">else</span> {<br>
+&nbsp;&nbsp;console.<span class="response-key">log</span>(<span class="response-string">'没有运行中的游戏'</span>);<br>
+}
+                </div>
+            </div>
+        </section>
+        
+        <!-- DownloadManager API -->
+        <section id="download-api" class="api-section">
+            <div class="api-header">
+                <div class="api-icon">⚡</div>
+                <div>
+                    <h2>DownloadManager API</h2>
+                    <p>下载管理器接口</p>
+                </div>
+            </div>
+            
+            <!-- downloadFile -->
+            <div id="download-file" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>downloadFile()</code></h3>
+                <p>下载文件（支持多线程）</p>
+                
+                <div class="url">async downloadFile(url: string, savePath: string, threads?: number): Promise&lt;Object&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>默认值</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>url</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>-</td>
+                        <td>下载 URL</td>
+                    </tr>
+                    <tr>
+                        <td>savePath</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>-</td>
+                        <td>保存路径</td>
+                    </tr>
+                    <tr>
+                        <td>threads</td>
+                        <td>number</td>
+                        <td>否</td>
+                        <td>2</td>
+                        <td>下载线程数（1-4）</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> result = <span class="response-key">await</span> downloadManager.<span class="response-key">downloadFile</span>(<br>
+&nbsp;&nbsp;<span class="response-string">'https://bmclapi2.bangbang93.com/version/1.20.1/client'</span>,<br>
+&nbsp;&nbsp;<span class="response-string">'/path/to/minecraft/versions/1.20.1.jar'</span>,<br>
+&nbsp;&nbsp;<span class="response-number">2</span> <span class="response-comment">// 2个线程下载</span><br>
+);
+                </div>
+                
+                <h4>响应示例</h4>
+                <div class="response-example">
+{<br>
+&nbsp;&nbsp;<span class="response-string">"success"</span>: <span class="response-boolean">true</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"path"</span>: <span class="response-string">"/path/to/minecraft/versions/1.20.1.jar"</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"size"</span>: <span class="response-number">12345678</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"time"</span>: <span class="response-number">5.2</span><br>
+}
+                </div>
+            </div>
+            
+            <!-- downloadVersion -->
+            <div id="download-version" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>downloadVersion()</code></h3>
+                <p>下载游戏版本</p>
+                
+                <div class="url">async downloadVersion(versionId: string): Promise&lt;Object&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>versionId</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>游戏版本 ID，如 '1.20.1'</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> downloadManager = <span class="response-key">new</span> <span class="response-key">DownloadManager</span>(configManager);<br><br>
+
+<span class="response-comment">// 下载游戏版本</span><br>
+<span class="response-key">const</span> result = <span class="response-key">await</span> downloadManager.<span class="response-key">downloadVersion</span>(<span class="response-string">'1.20.1'</span>);<br><br>
+
+<span class="response-comment">// 监听进度事件</span><br>
+downloadManager.<span class="response-key">on</span>(<span class="response-string">'download-progress'</span>, (progress) => {<br>
+&nbsp;&nbsp;console.<span class="response-key">log</span>(<span class="response-string">`下载进度: <span class="response-number">${</span>progress.percent<span class="response-number">}</span>%`</span>);<br>
+});
+                </div>
+            </div>
+            
+            <!-- downloadAssets -->
+            <div id="download-assets" class="endpoint">
+                <h3><span class="method method-post">POST</span> <code>downloadAssets()</code></h3>
+                <p>下载游戏资源文件</p>
+                
+                <div class="url">async downloadAssets(versionInfo: Object): Promise&lt;void&gt;</div>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-comment">// 先获取版本信息</span><br>
+<span class="response-key">const</span> versionInfo = <span class="response-key">await</span> downloadManager.<span class="response-key">getVersionInfo</span>(<span class="response-string">'1.20.1'</span>);<br><br>
+
+<span class="response-comment">// 下载资源文件</span><br>
+<span class="response-key">await</span> downloadManager.<span class="response-key">downloadAssets</span>(versionInfo);
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <h3><span class="method method-get">GET</span> <code>getVersionList()</code></h3>
+                <p>获取 Minecraft 版本列表</p>
+                
+                <div class="url">async getVersionList(): Promise&lt;Array&lt;Object&gt;&gt;</div>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> versions = <span class="response-key">await</span> downloadManager.<span class="response-key">getVersionList</span>();<br>
+<span class="response-key">const</span> latestVersion = versions.<span class="response-key">find</span>(v => v.type === <span class="response-string">'release'</span>);
+                </div>
+            </div>
+        </section>
+        
+        <!-- ConfigManager API -->
+        <section id="config-api" class="api-section">
+            <div class="api-header">
+                <div class="api-icon">⚙️</div>
+                <div>
+                    <h2>ConfigManager API</h2>
+                    <p>配置管理器接口</p>
+                </div>
+            </div>
+            
+            <!-- getConfig -->
+            <div id="config-get" class="endpoint">
+                <h3><span class="method method-get">GET</span> <code>getConfig()</code></h3>
+                <p>获取所有配置</p>
+                
+                <div class="url">async getConfig(): Promise&lt;Object&gt;</div>
+                
+                <h4>响应示例</h4>
+                <div class="response-example">
+{<br>
+&nbsp;&nbsp;<span class="response-string">"downloadSource"</span>: <span class="response-string">"bmclapi"</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"gameDirectory"</span>: <span class="response-string">"/home/user/.hcl-minecraft"</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"javaPath"</span>: <span class="response-string">"/usr/bin/java"</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"memory"</span>: <span class="response-number">2048</span>,<br>
+&nbsp;&nbsp;<span class="response-string">"language"</span>: <span class="response-string">"zh_CN"</span><br>
+}
+                </div>
+            </div>
+            
+            <!-- saveConfig -->
+            <div id="config-save" class="endpoint">
+                <h3><span class="method method-put">PUT</span> <code>saveConfig()</code></h3>
+                <p>保存配置</p>
+                
+                <div class="url">async saveConfig(config: Object): Promise&lt;boolean&gt;</div>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> config = <span class="response-key">await</span> configManager.<span class="response-key">getConfig</span>();<br>
+config.memory = <span class="response-number">4096</span>; <span class="response-comment">// 增加内存到4GB</span><br>
+<span class="response-key">const</span> success = <span class="response-key">await</span> configManager.<span class="response-key">saveConfig</span>(config);
+                </div>
+            </div>
+        </section>
+        
+        <!-- DataManager API -->
+        <section id="data-api" class="api-section">
+            <div class="api-header">
+                <div class="api-icon">💾</div>
+                <div>
+                    <h2>DataManager API</h2>
+                    <p>数据管理器接口 - 本地数据存储和管理</p>
+                </div>
+            </div>
+            
+            <div class="api-tip">
+                <strong>💡 提示：</strong> DataManager 是 HCL 启动器的核心数据层，负责安全地存储和管理所有本地数据，包括账户、配置、缓存等。
+            </div>
+            
+            <!-- 基本用法 -->
+            <div id="data-load" class="endpoint">
+                <h3><span class="method method-get">GET</span> <code>loadData()</code></h3>
+                <p>加载数据文件</p>
+                
+                <div class="url">async loadData(filename: string, defaultValue?: any): Promise&lt;any&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>默认值</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>filename</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>-</td>
+                        <td>数据文件名（不包含扩展名）</td>
+                    </tr>
+                    <tr>
+                        <td>defaultValue</td>
+                        <td>any</td>
+                        <td>否</td>
+                        <td>null</td>
+                        <td>文件不存在时返回的默认值</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-key">const</span> configManager = <span class="response-key">new</span> <span class="response-key">ConfigManager</span>();<br>
+<span class="response-key">await</span> configManager.<span class="response-key">init</span>();<br>
+<span class="response-key">const</span> dataManager = <span class="response-key">new</span> <span class="response-key">DataManager</span>(configManager);<br><br>
+
+<span class="response-comment">// 加载账户数据</span><br>
+<span class="response-key">const</span> accounts = <span class="response-key">await</span> dataManager.<span class="response-key">loadData</span>(<span class="response-string">'accounts'</span>, []);<br>
+<span class="response-key">const</span> userPrefs = <span class="response-key">await</span> dataManager.<span class="response-key">loadData</span>(<span class="response-string">'user-preferences'</span>, {});<br>
+<span class="response-key">const</span> versionCache = <span class="response-key">await</span> dataManager.<span class="response-key">loadData</span>(<span class="response-string">'version-cache'</span>, []);
+                </div>
+            </div>
+            
+            <!-- saveData -->
+            <div id="data-save" class="endpoint">
+                <h3><span class="method method-put">PUT</span> <code>saveData()</code></h3>
+                <p>保存数据文件</p>
+                
+                <div class="url">async saveData(filename: string, data: any): Promise&lt;boolean&gt;</div>
+                
+                <h4>参数说明</h4>
+                <table class="params-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>必需</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>filename</td>
+                        <td>string</td>
+                        <td class="param-required">是</td>
+                        <td>数据文件名（不包含扩展名）</td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td>any</td>
+                        <td class="param-required">是</td>
+                        <td>要保存的数据</td>
+                    </tr>
+                </table>
+                
+                <h4>示例代码</h4>
+                <div class="response-example">
+<span class="response-comment">// 保存用户偏好设置</span><br>
+<span class="response-key">const</span> userPreferences = {<br>
+&nbsp;&nbsp;theme: <span class="response-string">'dark'</span>,<br>
+&nbsp;&nbsp;language: <span class="response-string">'zh_CN'</span>,<br>
+&nbsp;&nbsp;recentVersions: [<span class="response-string">'1.20.1'</span>, <span class="response-string">'1.19.4'</span>]<br>
+};<br>
+<span class="response-key">await</span> dataManager.<span class="response-key">saveData</span>(<span class="response-string">'user-preferences'</span>, userPreferences);<br><br>
+
+<span class="response-comment">// 保存游戏统计</span><br>
+<span class="response-key">const</span> gameStats = {<br>
+&nbsp;&nbsp;totalLaunches: <span class="response-number">15</span>,<br>
+&nbsp;&nbsp;playTime: <span class="response-number">3600</span>,<br>
+&nbsp;&nbsp;lastLaunch: <span class="response-key">new</span> <span class="response-key">Date</span>().<span class="response-key">toISOString</span>()<br>
+};<br>
+<span class="response-key">await</span> dataManager.<span class="response-key">saveData</span>(<span class="response-string">'game-stats'</span>, gameStats);
+                </div>
+            </div>
+            
+            <!-- 账户管理 -->
+            <div id="data-accounts" class="endpoint">
+                <h3>👤 账户管理</h3>
+                <p>账户的 CRUD 操作</p>
+                
+                <h4>添加账户</h4>
+                <div class="response-example">
+<span class="response-key">const</span> account = {<br>
+&nbsp;&nbsp;username: <span class="response-string">'Player123'</span>,<br>
+&nbsp;&nbsp;type: <span class="response-string">'microsoft'</span>,<br>
+&nbsp;&nbsp;uuid: <span class="response-string">'d1b37b12a1234567890abcdef123456'</span>,<br>
+&nbsp;&nbsp;accessToken: <span class="response-string">'xxx'</span>,<br>
+&nbsp;&nbsp;avatar: <span class="response-string">'data:image/png;base64,...'</span><br>
+};<br>
+<span class="response-key">const</span> accountId = <span class="response-key">await</span> dataManager.<span class="response-key">addAccount</span>(account);<br>
+console.<span class="response-key">log</span>(<span class="response-string">'添加账户成功:'</span>, accountId);
+                </div>
+                
+                <h4>获取所有账户</h4>
+                <div class="response-example">
+<span class="response-key">const</span> accounts = <span class="response-key">await</span> dataManager.<span class="response-key">getAccounts</span>();<br>
+console.<span class="response-key">log</span>(<span class="response-string">'账户列表:'</span>, accounts);
+                </div>
+                
+                <h4>更新账户</h4>
+                <div class="response-example">
+<span class="response-key">await</span> dataManager.<span class="response-key">updateAccount</span>(accountId, {<br>
+&nbsp;&nbsp;username: <span class="response-string">'NewName'</span>,<br>
+&nbsp;&nbsp;lastUsed: <span class="response-key">new</span> <span class="response-key">Date</span>().<span class="response-key">toISOString</span>()<br>
+});
+                </div>
+                
+                <h4>删除账户</h4>
+                <div class="response-example">
+<span class="response-key">await</span> dataManager.<span class="response-key">removeAccount</span>(accountId);
+                </div>
+            </div>
+            
+            <!-- 缓存管理 -->
+            <div id="data-cache" class="endpoint">
+                <h3>📦 缓存管理</h3>
+                <p>各种缓存的存储和清理</p>
+                
+                <h4>版本缓存</h4>
+                <div class="response-example">
+<span class="response-comment">// 缓存版本信息</span><br>
+<span class="response-key">const</span> versionInfo = {<br>
+&nbsp;&nbsp;id: <span class="response-string">'1.20.1'</span>,<br>
+&nbsp;&nbsp;type: <span class="response-string">'release'</span>,<br>
+&nbsp;&nbsp;releaseTime: <span class="response-string">'2023-06-07T00:00:00Z'</span>,<br>
+&nbsp;&nbsp;installed: <span class="response-key">true</span><br>
+};<br>
+<span class="response-key">await</span> dataManager.<span class="response-key">cacheVersion</span>(versionInfo);<br><br>
+
+<span class="response-comment">// 获取缓存版本</span><br>
+<span class="response-key">const</span> cachedVersion = <span class="response-key">await</span> dataManager.<span class="response-key">getCachedVersion</span>(<span class="response-string">'1.20.1'</span>);
+                </div>
+                
+                <h4>头像缓存</h4>
+                <div class="response-example">
+<span class="response-comment">// 缓存头像</span><br>
+<span class="response-key">await</span> dataManager.<span class="response-key">cacheAvatar</span>(<span class="response-string">'Notch'</span>, <span class="response-string">'data:image/png;base64,...'</span>);<br><br>
+
+<span class="response-comment">// 获取缓存头像</span><br>
+<span class="response-key">const</span> avatar = <span class="response-key">await</span> dataManager.<span class="response-key">getCachedAvatar</span>(<span class="response-string">'Notch'</span>);<br><br>
+
+<span class="response-comment">// 清理过期头像</span><br>
+<span class="response-key">const</span> cleared = <span class="response-key">await</span> dataManager.<span class="response-key">clearExpiredAvatars</span>();<br>
+console.<span class="response-key">log</span>(<span class="response-string

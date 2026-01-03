@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块文档 - HCL 文档</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .module-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #4a90e2;
+        }
+        
+        .module-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .module-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+        
+        .module-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .api-method {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #4a90e2;
+        }
+        
+        .method-signature {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        .param-table th, .param-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        .param-table th {
+            background: #e3f2fd;
+        }
+        
+        .code-example {
+            background: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        
+        .keyword { color: #cc7832; }
+        .function { color: #ffc66d; }
+        .string { color: #6a8759; }
+        .comment { color: #808080; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧩 模块文档</h1>
+            <p>HCL 启动器核心模块详细文档</p>
+        </header>
+        
+        <nav>
+            <a href="index.html">← 返回首页</a>
+        </nav>
+        
+        <!-- AvatarManager -->
+        <section id="avatar-manager" class="module-section">
+            <div class="module-header">
+                <div class="module-icon">🎨</div>
+                <div>
+                    <h2>AvatarManager</h2>
+                    <p>头像管理器 - 负责玩家头像的获取、缓存和显示</p>
+                </div>
+            </div>
+            
+            <div class="module-info">
+                <p><strong>文件位置:</strong> <code>src/core/AvatarManager.js</code></p>
+                <p><strong>依赖:</strong> DataManager</p>
+            </div>
+            
+            <h3>📋 功能概述</h3>
+            <ul>
+                <li>支持多种头像源 (Crafatar, Minotar, MC-Heads)</li>
+                <li>智能缓存机制 (内存 + 本地存储)</li>
+                <li>批量头像获取</li>
+                <li>离线头像生成</li>
+                <li>Web Component 支持</li>
+            </ul>
+            
+            <h3>🚀 快速使用</h3>
+            <div class="code-example">
+<span class="comment">// 初始化</span><br>
+<span class="keyword">const</span> dataManager = <span class="keyword">new</span> DataManager();<br>
+<span class="keyword">await</span> dataManager.init();<br>
+<span class="keyword">const</span> avatarManager = <span class="keyword">new</span> <span class="function">AvatarManager</span>(dataManager);<br><br>
+
+<span class="comment">// 获取单个头像</span><br>
+<span class="keyword">const</span> avatar = <span class="keyword">await</span> avatarManager.<span class="function">getAvatar</span>(<span class="string">'Notch'</span>);<br><br>
+
+<span class="comment">// 批量获取</span><br>
+<span class="keyword">const</span> accounts = [<br>
+&nbsp;&nbsp;{ username: <span class="string">'Steve'</span> },<br>
+&nbsp;&nbsp;{ username: <span class="string">'Alex'</span> }<br>
+];<br>
+<span class="keyword">const</span> avatars = <span class="keyword">await</span> avatarManager.<span class="function">batchGetAvatars</span>(accounts, onProgress);
+            </div>
+            
+            <h3>🔧 API 参考</h3>
+            
+            <div class="api-method">
+                <h4>getAvatar(username, uuid, forceRefresh)</h4>
+                <p>获取玩家头像</p>
+                
+                <div class="method-signature">
+                    async getAvatar(username: string, uuid?: string, forceRefresh: boolean = false): Promise&lt;string&gt;
+                </div>
+                
+                <table class="param-table">
+                    <tr>
+                        <th>参数</th>
+                        <th>类型</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>username</td>
+                        <td>string</td>
+                        <td>玩家用户名</td>
+                    </tr>
+                    <tr>
+                        <td>uuid</td>
+                        <td>string</td>
+                        <td>玩家UUID (可选)</td>
+                    </tr>
+                    <tr>
+                        <td>forceRefresh</td>
+                        <td>boolean</td>
+                        <td>强制刷新缓存，默认 false</td>
+                    </tr>
+                </table>
+                
+                <p><strong>返回值:</strong> 头像的 DataURL 字符串</p>
+            </div>
+            
+            <div class="api-method">
+                <h4>batchGetAvatars(accounts, onProgress)</h4>
+                <p>批量获取头像</p>
+                
+                <div class="method-signature">
+                    async batchGetAvatars(accounts: Array, onProgress: Function): Promise&lt;Array&gt;
+                </div>
+            </div>
+            
+            <h3>⚙️ 配置项</h3>
+            <table class="param-table">
+                <tr>
+                    <th>配置</th>
+                    <th>可选值</th>
+                    <th>默认</th>
+                    <th>说明</th>
+                </tr>
+                <tr>
+                    <td>avatarSource</td>
+                    <td>crafatar | minotar | mc-heads</td>
+                    <td>crafatar</td>
+                    <td>头像源</td>
+                </tr>
+            </table>
+        </section>
+        
+        <!-- AccountManager -->
+        <section id="account-manager" class="module-section">
+            <div class="module-header">
+                <div class="module-icon">👤</div>
+                <div>
+                    <h2>AccountManager</h2>
+                    <p>账户管理器 - 管理 Microsoft、第三方和离线账户</p>
+                </div>
+            </div>
+            
+            <h3>📋 账户类型</h3>
+            <ul>
+                <li><strong>Microsoft 账户:</strong> OAuth2 认证，正版验证</li>
+                <li><strong>第三方账户:</strong> 外置登录支持</li>
+                <li><strong>离线账户:</strong> 快速创建，本地存储</li>
+            </ul>
+            
+            <h3>🚀 快速使用</h3>
+            <div class="code-example">
+<span class="comment">// 添加 Microsoft 账户</span><br>
+<span class="keyword">const</span> accountId = <span class="keyword">await</span> accountManager.<span class="function">addAccount</span>({<br>
+&nbsp;&nbsp;type: <span class="string">'microsoft'</span>,<br>
+&nbsp;&nbsp;username: <span class="string">'Player123'</span>,<br>
+&nbsp;&nbsp;accessToken: <span class="string">'xxx'</span>,<br>
+&nbsp;&nbsp;refreshToken: <span class="string">'xxx'</span><br>
+});<br><br>
+
+<span class="comment">// 获取账户列表</span><br>
+<span class="keyword">const</span> accounts = accountManager.<span class="function">getAccounts</span>();<br><br>
+
+<span class="comment">// 切换账户</span><br>
+<span class="keyword">await</span> accountManager.<span class="function">setCurrentAccount</span>(accountId);
+            </div>
+            
+            <h3>🔧 数据结构</h3>
+            <div class="code-example">
+{<br>
+&nbsp;&nbsp;<span class="string">"id"</span>: <span class="string">"msa_123456"</span>,<br>
+&nbsp;&nbsp;<span class="string">"type"</span>: <span class="string">"microsoft"</span>,<br>
+&nbsp;&nbsp;<span class="string">"username"</span>: <span class="string">"Player123"</span>,<br>
+&nbsp;&nbsp;<span class="string">"uuid"</span>: <span class="string">"d1b37b12a..."</span>,<br>
+&nbsp;&nbsp;<span class="string">"avatar"</span>: <span class="string">"data:image/png;base64,..."</span>,<br>
+&nbsp;&nbsp;<span class="string">"accessToken"</span>: <span class="string">"encrypted_token"</span>,<br>
+&nbsp;&nbsp;<span class="string">"lastUsed"</span>: <span class="number">1700000000000</span><br>
+}
+            </div>
+        </section>
+        
+        <!-- GameManager -->
+        <section id="game-manager" class="module-section">
+            <div class="module-header">
+                <div class="module-icon">🎮</div>
+                <div>
+                    <h2>GameManager</h2>
+                    <p>游戏管理器 - 负责 Minecraft 游戏的启动、监控和管理</p>
+                </div>
+            </div>
+            
+            <h3>📋 功能特性</h3>
+            <ul>
+                <li>游戏进程启动和管理</li>
+                <li>JVM 参数自动优化</li>
+                <li>游戏输出监控</li>
+                <li>崩溃检测和恢复</li>
+            </ul>
+            
+            <h3>🚀 快速使用</h3>
+            <div class="code-example">
+<span class="comment">// 启动游戏</span><br>
+<span class="keyword">const</span> result = <span class="keyword">await</span> gameManager.<span class="function">launchGame</span>({<br>
+&nbsp;&nbsp;account: currentAccount,<br>
+&nbsp;&nbsp;version: selectedVersion,<br>
+&nbsp;&nbsp;javaPath: config.javaPath,<br>
+&nbsp;&nbsp;memory: config.memory<br>
+});<br><br>
+
+<span class="comment">// 监听游戏输出</span><br>
+gameManager.on(<span class="string">'game-output'</span>, (output) => {<br>
+&nbsp;&nbsp;console.<span class="function">log</span>(<span class="string">'游戏输出:'</span>, output);<br>
+});<br><br>
+
+<span class="comment">// 停止游戏</span><br>
+gameManager.<span class="function">stopGame</span>();
+            </div>
+        </section>
+        
+        <!-- DownloadManager -->
+        <section id="download-manager" class="module-section">
+            <div class="module-header">
+                <div class="module-icon">⚡</div>
+                <div>
+                    <h2>DownloadManager</h2>
+                    <p>下载管理器 - 负责游戏文件的多线程下载和管理</p>
+                </div>
+            </div>
+            
+            <h3>📋 功能特性</h3>
+            <ul>
+                <li>多线程下载 (2-4 线程)</li>
+                <li>断点续传支持</li>
+                <li>BMCLAPI 镜像支持</li>
+                <li>下载进度实时显示</li>
+            </ul>
+            
+            <h3>🚀 快速使用</h3>
+            <div class="code-example">
+<span class="comment">// 下载文件</span><br>
+<span class="keyword">await</span> downloadManager.<span class="function">downloadFile</span>(url, savePath, <span class="number">2</span>);<br><br>
+
+<span class="comment">// 获取版本列表</span><br>
+<span class="keyword">const</span> versions = <span class="keyword">await</span> downloadManager.<span class="function">getVersionList</span>();<br><br>
+
+<span class="comment">// 下载游戏版本</span><br>
+<span class="keyword">await</span> downloadManager.<span class="function">downloadVersion</span>(versionId);
+            </div>
+        </section>
+        
+        <!-- 其他模块 -->
+        <section class="module-section">
+            <h2>其他模块</h2>
+            
+            <h3>ConfigManager</h3>
+            <p>配置文件管理，支持多平台路径适配</p>
+            <p><strong>配置文件:</strong> hcl-config.json</p>
+            
+            <h3>DataManager</h3>
+            <p>本地数据存储管理 (accounts, settings, cache)</p>
+            <p><strong>数据文件:</strong> data.json</p>
+        </section>
+        
+        <footer>
+            <p>
+                <a href="features.html">← 功能特性</a> | 
+                <a href="api.html">下一步：API 参考 →</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

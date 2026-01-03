@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electron打包教程 Hold Craft Launcher文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .preview-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .info-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        h3 {
+            color: #3498db;
+            margin: 15px 0 10px;
+        }
+        
+        .web-preview {
+            background: #f8f9fa;
+            border-radius: 8px;
+            height: 300px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+        
+        .browser-bar {
+            background: #e0e0e0;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .browser-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .close {
+            background: #ff5f57;
+        }
+        
+        .minimize {
+            background: #ffbd2e;
+        }
+        
+        .maximize {
+            background: #28ca42;
+        }
+        
+        .url-bar {
+            flex: 1;
+            background: white;
+            margin: 0 15px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .web-content {
+            padding: 20px;
+            height: calc(100% - 40px);
+            overflow-y: auto;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            display: block;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .terminal {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: "> ";
+            color: #3498db;
+        }
+        
+        .pack-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        
+        .pack-button:hover {
+            background: #2980b9;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 150px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .preview-section, .info-section {
+                width: 100%;
+            }
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #3498db;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>将网页打包为Electron应用</h1>
+            <p class="subtitle">使用Electron将您的Web应用转换为跨平台桌面应用程序</p>
+        </header>
+        
+        <div class="content">
+            <div class="preview-section">
+                <div class="card">
+                    <h2>网页预览</h2>
+                    <div class="web-preview">
+                        <div class="browser-bar">
+                            <div class="browser-controls">
+                                <div class="control close"></div>
+                                <div class="control minimize"></div>
+                                <div class="control maximize"></div>
+                            </div>
+                            <div class="url-bar">https://mywebapp.com</div>
+                        </div>
+                        <div class="web-content">
+                            <h3>我的Web应用</h3>
+                            <p>这是一个示例网页应用，可以使用Electron打包为桌面应用。</p>
+                            <p>功能包括：</p>
+                            <ul>
+                                <li>响应式用户界面</li>
+                                <li>数据可视化图表</li>
+                                <li>用户交互功能</li>
+                                <li>本地存储支持</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Electron应用结构</h2>
+                    <div class="terminal">main.js - 主进程文件</div>
+                    <div class="terminal">index.html - 渲染进程界面</div>
+                    <div class="terminal">package.json - 项目配置文件</div>
+                    <div class="terminal">node_modules/ - 依赖目录</div>
+                    
+                    <button class="pack-button" id="packBtn">模拟打包过程</button>
+                    
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="card">
+                    <h2>打包步骤</h2>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>环境准备</h3>
+                            <p>确保已安装Node.js，然后初始化项目：</p>
+                            <code>npm init -y</code>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>安装Electron</h3>
+                            <p>在项目中安装Electron作为开发依赖：</p>
+                            <code>npm install electron --save-dev</code>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>创建主进程文件</h3>
+                            <p>创建main.js文件，配置应用窗口并加载网页：</p>
+                            <code>
+const { app, BrowserWindow } = require('electron')<br>
+<br>
+function createWindow () {<br>
+&nbsp;&nbsp;const win = new BrowserWindow({<br>
+&nbsp;&nbsp;&nbsp;&nbsp;width: 1200,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;height: 800,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;webPreferences: {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nodeIntegration: true<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;})<br>
+<br>
+&nbsp;&nbsp;win.loadURL('https://your-website.com')<br>
+}<br>
+<br>
+app.whenReady().then(createWindow)
+                            </code>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>配置package.json</h3>
+                            <p>在package.json中添加启动脚本：</p>
+                            <code>
+{<br>
+&nbsp;&nbsp;"name": "my-electron-app",<br>
+&nbsp;&nbsp;"version": "1.0.0",<br>
+&nbsp;&nbsp;"main": "main.js",<br>
+&nbsp;&nbsp;"scripts": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"start": "electron .",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"build": "electron-builder"<br>
+&nbsp;&nbsp;}<br>
+}
+                            </code>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>打包分发</h3>
+                            <p>安装electron-builder并打包应用：</p>
+                            <code>npm install electron-builder --save-dev</code>
+                            <code>npm run build</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Electron核心概念</h2>
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon">⚡</div>
+                            <h3>主进程</h3>
+                            <p>控制应用生命周期，创建渲染进程</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🖥️</div>
+                            <h3>渲染进程</h3>
+                            <p>显示用户界面，每个窗口独立进程</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🔗</div>
+                            <h3>进程通信</h3>
+                            <p>主进程与渲染进程间通信机制</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Electron打包教程，Hold Craft Launcher制作</p>
+        </footer>
+    </div>
+
+    <script>
+        // 模拟打包过程
+        document.getElementById('packBtn').addEventListener('click', function() {
+            const progressBar = document.getElementById('progress');
+            const button = this;
+            
+            button.disabled = true;
+            button.textContent = '打包中...';
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 5;
+                progressBar.style.width = width + '%';
+                
+                if (width >= 100) {
+                    clearInterval(interval);
+                    button.textContent = '打包完成！';
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.textContent = '重新打包';
+                        progressBar.style.width = '0%';
+                    }, 2000);
+                }
+            }, 100);
+        });
+        
+        // 添加一些交互效果
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
