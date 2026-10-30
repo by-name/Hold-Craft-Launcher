@@ -181,7 +181,7 @@
                 
                 <!-- 用户头像 -->
                 <div class="user-avatar" id="user-avatar" onclick="showUserMenu()">
-                    <img src="assets/default-avatar.png" alt="用户" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%234a90e2%22 rx=%2220%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-size=%2250%22 fill=%22white%22>👤</text></svg>'">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%234a90e2%22 rx=%2220%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-size=%2250%22 fill=%22white%22>👤</text></svg>" alt="用户" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%234a90e2%22 rx=%2220%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-size=%2250%22 fill=%22white%22>👤</text></svg>'">
                 </div>
             </div>
         </header>
@@ -202,7 +202,7 @@
                     <div class="account-list" id="account-list">
                         <!-- 账户列表会动态加载 -->
                         <div class="account-item active">
-                            <img src="assets/default-avatar.png" alt="玩家" class="account-avatar">
+                            <img src="data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%234a90e2%22 rx=%2220%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-size=%2250%22 fill=%22white%22>👤</text></svg>" alt="玩家" class="account-avatar">
                             <div class="account-info">
                                 <div class="account-name">Player123</div>
                                 <div class="account-type">Microsoft 账户</div>
@@ -210,7 +210,7 @@
                         </div>
                         
                         <div class="account-item">
-                            <img src="assets/default-avatar.png" alt="玩家" class="account-avatar">
+                            <img src="data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%234a90e2%22 rx=%2220%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-size=%2250%22 fill=%22white%22>👤</text></svg>" alt="玩家" class="account-avatar">
                             <div class="account-info">
                                 <div class="account-name">离线玩家</div>
                                 <div class="account-type">离线账户</div>
@@ -230,12 +230,178 @@
                     
                     <div class="version-controls">
                         <div class="version-filter">
-                            <button class="filter-btn active" onclick="filterVersions('all')">全部</button>
-                            <button class="filter-btn" onclick="filterVersions('release')">正式版</button>
-                            <button class="filter-btn" onclick="filterVersions('snapshot')">快照</button>
-                            <button class="filter-btn" onclick="filterVersions('installed')">已安装</button>
+                            <button class="filter-btn active" onclick="filterVersions('all', event)">全部</button>
+                            <button class="filter-btn" onclick="filterVersions('release', event)">正式版</button>
+                            <button class="filter-btn" onclick="filterVersions('snapshot', event)">快照</button>
+                            <button class="filter-btn" onclick="filterVersions('installed', event)">已安装</button>
                         </div>
                         
                         <div class="version-search">
                             <input type="text" placeholder="搜索版本..." class="search-input" id="version-search">
-                       
+                        </div>
+                    </div>
+                    
+                    <div class="version-list" id="version-list">
+                        <div class="version-empty">正在加载版本列表...</div>
+                    </div>
+                </div>
+                
+                <!-- 路径信息（由 launch.js 填充） -->
+                <div id="path-info" class="path-info-container"></div>
+            </div>
+            
+            <!-- 右侧面板 -->
+            <div class="right-panel">
+                <div class="launch-panel">
+                    <h3>🚀 启动游戏</h3>
+                    
+                    <div class="launch-status" id="launch-status">
+                        <span class="status-icon">🟢</span>
+                        <span class="status-text">就绪</span>
+                    </div>
+                    
+                    <div class="launch-buttons">
+                        <button class="btn btn-primary btn-launch" onclick="launchGame()">启动游戏</button>
+                        <button class="btn btn-secondary" onclick="openSettings()">设置</button>
+                    </div>
+                </div>
+                
+                <div class="game-log-section">
+                    <div class="log-header">
+                        <h3>📄 游戏日志</h3>
+                    </div>
+                    <div class="game-log-container">
+                        <pre class="game-output" id="game-output"></pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="main-footer">
+            <span>HCL 启动器 v1.0.0</span>
+        </footer>
+    </div>
+
+    <!-- 脚本文件 -->
+    <script src="js/launch.js"></script>
+    <script>
+        // 打开设置页面
+        window.openSettings = function () {
+            if (window.electronAPI) {
+                window.electronAPI.openSettings();
+            }
+        };
+
+        // 用户菜单占位实现
+        window.showUserMenu = function () {
+            if (window.electronAPI && window.electronAPI.openSettings) {
+                window.electronAPI.openSettings();
+            }
+        };
+
+        // 添加账户
+        window.addAccount = async function () {
+            const username = window.prompt('请输入离线账户名称:');
+            if (!username) {
+                return;
+            }
+            try {
+                await window.electronAPI.invoke('add-account', { username, type: 'offline' });
+                window.location.reload();
+            } catch (error) {
+                window.alert('添加账户失败: ' + error.message);
+            }
+        };
+
+        // 刷新版本列表
+        window.refreshVersions = async function () {
+            await renderVersions('all');
+        };
+
+        // 过滤版本
+        window.filterVersions = function (type, event) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+            renderVersions(type);
+        };
+
+        // 渲染版本列表
+        window.renderVersions = async function (type = 'all') {
+            const container = document.getElementById('version-list');
+            if (!container) {
+                return;
+            }
+
+            container.innerHTML = '<div class="version-empty">正在加载版本列表...</div>';
+
+            try {
+                const manifest = await window.electronAPI.invoke('get-version-list');
+                let versions = (manifest && manifest.versions) || [];
+
+                if (type === 'release') {
+                    versions = versions.filter(v => v.type === 'release');
+                } else if (type === 'snapshot') {
+                    versions = versions.filter(v => v.type === 'snapshot');
+                }
+
+                if (versions.length === 0) {
+                    container.innerHTML = '<div class="version-empty">没有可显示的版本</div>';
+                    return;
+                }
+
+                container.innerHTML = versions.slice(0, 50).map(v => `
+                    <div class="version-list-item" data-id="${v.id}">
+                        <div class="version-name">${v.id}</div>
+                        <div class="version-type">${v.type}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = `<div class="version-empty">版本列表加载失败: ${error.message}</div>`;
+            }
+        };
+
+        // 启动游戏
+        window.launchGame = async function () {
+            if (!window.electronAPI) {
+                return;
+            }
+
+            try {
+                const config = await window.electronAPI.invoke('get-config');
+                const accounts = await window.electronAPI.invoke('get-all-accounts');
+                const account = accounts[0] || { username: 'Player', type: 'offline' };
+
+                const result = await window.electronAPI.invoke('launch-game', {
+                    account,
+                    version: { id: config.lastVersion || '1.20.1', assets: '1.20' },
+                    javaPath: config.javaPath || 'java',
+                    memory: config.memory || 2048
+                });
+
+                if (!result || !result.success) {
+                    window.alert('启动失败: ' + ((result && result.error) || '未知错误'));
+                }
+            } catch (error) {
+                window.alert('启动失败: ' + error.message);
+            }
+        };
+
+        // 页面加载完成后初始化启动器
+        document.addEventListener('DOMContentLoaded', () => {
+            window.gameLauncher = new HCLGameLauncher();
+
+            // 监听游戏输出
+            if (window.electronAPI) {
+                window.electronAPI.on('game-output', (output) => {
+                    const log = document.getElementById('game-output');
+                    if (log) {
+                        log.textContent += output.data || '';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

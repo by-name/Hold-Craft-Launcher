@@ -1,0 +1,214 @@
+/* settings.css - 设置页面样式 */
+
+.settings-app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settings-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    background: rgba(74, 144, 226, 0.2);
+    border-color: var(--primary-color);
+}
+
+.header-title h1 {
+    margin: 0;
+    font-size: 1.3em;
+}
+
+.header-subtitle {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
+.version-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(74, 144, 226, 0.2);
+    color: var(--primary-color);
+    font-size: 0.85em;
+}
+
+.settings-container {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 20px;
+    padding: 20px 25px;
+    flex: 1;
+}
+
+.settings-sidebar {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+    align-self: flex-start;
+}
+
+.nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.nav-item.active {
+    background: rgba(74, 144, 226, 0.2);
+    color: var(--primary-color);
+}
+
+.nav-icon {
+    font-size: 1.1em;
+}
+
+.nav-text {
+    font-size: 0.95em;
+}
+
+.settings-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 25px;
+}
+
+.settings-section {
+    display: none;
+    margin-bottom: 25px;
+}
+
+.settings-section.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.settings-section h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.15em;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item label {
+    min-width: 120px;
+    color: var(--text-secondary);
+    font-size: 0.95em;
+}
+
+.setting-item input[type="text"],
+.setting-item input[type="number"],
+.setting-item select {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+}
+
+.setting-item input:focus,
+.setting-item select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.setting-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.setting-description {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    margin: 5px 0 10px 0;
+}
+
+.settings-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-top: 1px solid var(--border-color);
+    background: var(--card-bg);
+}
+
+.footer-info {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.footer-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.about-link {
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .settings-container {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-sidebar {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .nav-list {
+        flex-direction: row;
+    }
+}

@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-const HCLConfigManager = require('../core/ConfigManager');
-const HCLDataManager = require('../core/DataManager');
+const HCLConfigManager = require('../core/configManager');
+const HCLDataManager = require('../core/dataManager');
 const HCLAccountManager = require('../core/AccountManager');
 const HCLDownloadManager = require('../core/DownloadManager');
 const HCLGameManager = require('../core/GameManager');
@@ -11,7 +11,7 @@ class HCLApplication {
         this.mainWindow = null;
         this.isDev = process.env.NODE_ENV === 'development';
         this.configManager = new HCLConfigManager();
-        this.dataManager = new HCLDataManager();
+        this.dataManager = null;
         this.accountManager = null;
         this.downloadManager = null;
         this.gameManager = null;
@@ -21,9 +21,10 @@ class HCLApplication {
         try {
             // 初始化核心管理器
             await this.configManager.initialize();
-            await this.dataManager.initialize();
-            
-            this.accountManager = new HCLAccountManager(this.dataManager);
+            this.dataManager = new HCLDataManager(this.configManager);
+            await this.dataManager.init();
+
+            this.accountManager = new HCLAccountManager(this.configManager);
             this.downloadManager = new HCLDownloadManager(this.configManager);
             this.gameManager = new HCLGameManager(this.configManager, this.downloadManager);
             
@@ -41,23 +42,30 @@ class HCLApplication {
     }
 
     createWindow() {
-        this.mainWindow = new BrowserWindow({
+        const iconPath = path.join(__dirname, '../../assets/icons/hcl-icon.png');
+        const windowOptions = {
             width: 1200,
             height: 800,
             minWidth: 900,
             minHeight: 600,
-            icon: path.join(__dirname, '../../assets/icons/hcl-icon.png'),
             title: 'HCL - Hold Craft Launcher',
             webPreferences: {
-                nodeIntegration: false,
-                contextIsolation: true,
+                nodeIntegration: true,
+                contextIsolation: false,
                 preload: path.join(__dirname, '../../preload.js')
             },
             show: false,
             titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default'
-        });
+        };
 
-        this.mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+        // 图标文件不存在时不要传入，避免 Electron 报错
+        if (require('fs').existsSync(iconPath)) {
+            windowOptions.icon = iconPath;
+        }
+
+        this.mainWindow = new BrowserWindow(windowOptions);
+
+        this.mainWindow.loadFile(path.join(__dirname, '../render/launch.html'));
 
         this.mainWindow.once('ready-to-show', () => {
             this.mainWindow.show();
@@ -105,6 +113,26 @@ class HCLApplication {
 
         ipcMain.handle('save-config', async (event, newConfig) => {
             return await this.configManager.saveConfig(newConfig);
+        });
+
+        ipcMain.handle('get-paths', () => {
+            return this.configManager.getPaths();
+        });
+
+        ipcMain.handle('open-settings', async () => {
+            if (!this.mainWindow) {
+                return false;
+            }
+            await this.mainWindow.loadFile(path.join(__dirname, '../render/settings.html'));
+            return true;
+        });
+
+        ipcMain.handle('open-launch', async () => {
+            if (!this.mainWindow) {
+                return false;
+            }
+            await this.mainWindow.loadFile(path.join(__dirname, '../render/launch.html'));
+            return true;
         });
 
         // 游戏启动
