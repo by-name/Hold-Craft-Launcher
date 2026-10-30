@@ -1136,10 +1136,7 @@ class SettingsManager {
         console.log('🎨 界面更新完成');
     }
     
-    // 公共方法
-    switchSection(section) {
-        this.switchSection(section);
-    }
+    // 公共方法（switchSection 见上方实现）
     
     async saveSettings() {
         if (this.isSaving) return;

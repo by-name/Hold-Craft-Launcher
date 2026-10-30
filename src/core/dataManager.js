@@ -14,7 +14,7 @@ class HCLDataManager {
         this.dataPath = null;
         this.encryptionKey = null;
         this.dataCache = new Map();
-        this.init();
+        // 注意：初始化为异步操作，需由调用方 await init()，不要在构造函数中直接调用
     }
     
     async init() {

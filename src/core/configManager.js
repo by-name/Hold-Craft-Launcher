@@ -1,5 +1,6 @@
 // src/core/ConfigManager.js
 const fs = require('fs').promises;
+const fsSync = require('fs');
 const path = require('path');
 const os = require('os');
 
@@ -18,7 +19,7 @@ class HCLConfigManager {
         const portableFlag = path.join(exeDir, 'portable.flag');
         
         try {
-            if (fs.existsSync(portableFlag)) {
+            if (fsSync.existsSync(portableFlag)) {
                 return true;
             }
         } catch (error) {
@@ -47,6 +48,7 @@ class HCLConfigManager {
         } else {
             // 安装模式：使用系统用户数据目录
             const { app } = require('electron');
+            this.exeDir = process.cwd();
             this.appDataPath = app.getPath('userData');
             this.configPath = path.join(this.appDataPath, 'hcl-config.json');
             this.gameDirectory = path.join(os.homedir(), '.hcl-minecraft');
@@ -182,6 +184,10 @@ class HCLConfigManager {
      * 创建使用说明文件
      */
     async createReadmeFile() {
+        if (!this.isPortable || !this.exeDir) {
+            return false;
+        }
+
         const readmePath = path.join(this.exeDir, 'README-PORTABLE.txt');
         const readmeContent = `=== HCL 启动器便携版使用说明 ===
 
@@ -286,6 +292,27 @@ hcl-data/             - 用户数据和配置
         return { ...this.config };
     }
     
+    /**
+     * 获取游戏目录（供 GameManager / VersionManager / ModManager 使用）
+     */
+    getGameDirectory() {
+        return this.gameDirectory;
+    }
+
+    /**
+     * 获取应用数据目录
+     */
+    getAppDataPath() {
+        return this.appDataPath;
+    }
+
+    /**
+     * 获取配置文件路径
+     */
+    getConfigPath() {
+        return this.configPath;
+    }
+
     /**
      * 保存配置
      */

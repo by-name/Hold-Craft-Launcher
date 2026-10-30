@@ -2,7 +2,7 @@ const { app } = require('electron');
 const path = require('path');
 const fs = require('fs').promises;
 
-class HCLLogger {
+class HCLSecurity {
     constructor() {
         this.logFile = path.join(app.getPath('userData'), 'hcl.log');
         this.maxFileSize = 5 * 1024 * 1024; // 5MB
@@ -75,4 +75,4 @@ class HCLLogger {
     }
 }
 
-module.exports = new HCLLogger();
+module.exports = new HCLSecurity();

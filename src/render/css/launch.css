@@ -664,6 +664,257 @@
     color: var(--text-color);
 }
 
+/* 启动页布局 */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 2em;
+}
+
+.logo-text h1 {
+    font-size: 1.4em;
+    margin: 0;
+}
+
+.logo-text p {
+    margin: 0;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px 25px;
+}
+
+.left-panel,
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.account-card,
+.version-card,
+.launch-panel {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.account-header,
+.version-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.account-header h3,
+.version-header h3,
+.launch-panel h3 {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+.account-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.account-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.account-item:hover,
+.account-item.active {
+    background: rgba(74, 144, 226, 0.2);
+}
+
+.account-item img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+.account-name {
+    font-weight: 500;
+}
+
+.account-type {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
+.version-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.version-filter {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-size: 0.85em;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.version-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.version-list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+}
+
+.version-list-item:hover {
+    background: rgba(74, 144, 226, 0.2);
+}
+
+.version-empty {
+    padding: 15px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.path-info-container {
+    margin-top: 5px;
+}
+
+.path-info {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px 20px;
+}
+
+.path-info h4 {
+    margin: 0 0 10px 0;
+}
+
+.path-item {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9em;
+    padding: 3px 0;
+}
+
+.path-label {
+    color: var(--text-secondary);
+    min-width: 80px;
+}
+
+.path-value {
+    word-break: break-all;
+}
+
+.launch-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 0;
+    color: var(--text-secondary);
+}
+
+.launch-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.main-footer {
+    padding: 15px 25px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--text-secondary);
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .launch-app {
